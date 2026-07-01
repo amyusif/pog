@@ -81,11 +81,11 @@ export function Navbar() {
       >
         <div className="container mx-auto px-6 md:px-12 flex items-center justify-between">
           <Link href="/" className="group flex items-center">
-            <div className="bg-black/60 backdrop-blur-sm rounded px-2 py-1">
+            <div className="px-2 py-1">
               <img
                 src="/logo.png"
                 alt="Power of Grace Events and Trading Limited"
-                className="h-14 md:h-20 w-auto object-contain transition-opacity group-hover:opacity-80"
+                className="h-20 md:h-28 w-auto object-contain transition-opacity group-hover:opacity-80"
               />
             </div>
           </Link>
@@ -231,7 +231,7 @@ export function Navbar() {
               <img
                 src="/logo.png"
                 alt="Power of Grace Events and Trading Limited"
-                className="h-12 w-auto object-contain brightness-0 invert"
+                className="h-20 w-auto object-contain brightness-0 invert"
               />
               <button
                 onClick={() => setMobileMenuOpen(false)}
