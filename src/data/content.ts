@@ -4,42 +4,42 @@ export const bandMembers = [
     name: "Emmanuel Asante",
     role: "Bandleader & Lead Guitar",
     bio: "The visionary behind Powers of Grace. Emmanuel's intricate riffs and soulful chords are the backbone of the band's signature sound. With over 15 years in the industry, his leadership brings out the best in every performance.",
-    image: "bg-gradient-to-br from-zinc-800 to-zinc-900"
+    image: "bg-[url('https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&q=80&w=1000')] bg-cover bg-center"
   },
   {
     id: 2,
     name: "Abena Mensah",
     role: "Lead Vocals",
     bio: "A voice that commands the room. Abena's vocal range effortlessly spans from delicate jazz whispers to powerhouse gospel belting. She connects deeply with every audience, turning strangers into fans.",
-    image: "bg-gradient-to-br from-zinc-900 to-black"
+    image: "bg-[url('https://images.unsplash.com/photo-1511192336575-5a79af67a629?auto=format&fit=crop&q=80&w=1000')] bg-cover bg-center"
   },
   {
     id: 3,
     name: "David Boateng",
     role: "Keys & Synths",
     bio: "The harmonic architect. David weaves lush piano melodies and vibrant synth textures that give the band its contemporary edge. His classical training meets modern sensibilities perfectly.",
-    image: "bg-gradient-to-br from-zinc-800 to-black"
+    image: "bg-[url('https://images.unsplash.com/photo-1524368535928-5b5e00ddc76b?auto=format&fit=crop&q=80&w=1000')] bg-cover bg-center"
   },
   {
     id: 4,
     name: "Akua Sarpong",
     role: "Drums & Percussion",
     bio: "The heartbeat of Powers of Grace. Akua's polyrhythmic mastery drives the energy of every set. Her dynamic playing ensures that nobody stays seated when the groove kicks in.",
-    image: "bg-gradient-to-br from-zinc-900 to-zinc-800"
+    image: "bg-[url('https://images.unsplash.com/photo-1525926477800-7a3b10316ac6?auto=format&fit=crop&q=80&w=1000')] bg-cover bg-center"
   },
   {
     id: 5,
     name: "Ama Agyeman",
     role: "Bass",
     bio: "Laying the foundation. Ama's deep, resonant basslines anchor the band's explosive sound. Known for her undeniable pocket and stage presence, she makes sure you feel the music as much as you hear it.",
-    image: "bg-gradient-to-br from-black to-zinc-800"
+    image: "bg-[url('https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&q=80&w=1000')] bg-cover bg-center"
   },
   {
     id: 6,
     name: "Kwame Owusu",
     role: "Trumpet & Brass",
     bio: "The golden tone. Kwame's soaring trumpet lines add the majestic, celebratory flavor that defines the Powers of Grace experience. His solos are legendary moments in every concert.",
-    image: "bg-gradient-to-br from-zinc-800 to-zinc-900"
+    image: "bg-[url('https://images.unsplash.com/photo-1520446266423-6daca23fe8c7?auto=format&fit=crop&q=80&w=1000')] bg-cover bg-center"
   }
 ];
 
@@ -49,28 +49,42 @@ export const services = [
     title: "Wedding Entertainment",
     description: "Transform your special day with music that speaks to the soul. From the delicate notes of your ceremony to the explosive energy of your reception, we provide a seamless, unforgettable soundtrack to your love story.",
     included: ["Ceremony acoustics", "Cocktail hour jazz trio", "Full band reception performance", "Custom first dance arrangement"],
-    image: "bg-gradient-to-br from-zinc-900 to-black"
+    image: "bg-[url('https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&q=80&w=1000')] bg-cover bg-center"
   },
   {
     id: "corporate",
     title: "Corporate Events & Galas",
     description: "Elevate your corporate gatherings with sophistication and style. We tailor our repertoire to perfectly match the tone of your event, whether it's understated elegance for networking or high-energy celebration for awards.",
     included: ["Arrival ambiance", "Dinner background music", "Awards walk-up stings", "Post-formalities party set"],
-    image: "bg-gradient-to-br from-black to-zinc-900"
+    image: "bg-[url('https://images.unsplash.com/photo-1511795409834-432f7b1728d2?auto=format&fit=crop&q=80&w=1000')] bg-cover bg-center"
   },
   {
     id: "concerts",
     title: "Concerts & Festivals",
     description: "Powers of Grace in our purest element. A commanding stage presence, virtuosic musicianship, and a setlist designed to take massive crowds on an emotional and rhythmic journey.",
     included: ["Original arrangements", "Full technical rider", "Festival-ready setlist", "High-impact stage production"],
-    image: "bg-gradient-to-br from-zinc-800 to-black"
+    image: "bg-[url('https://images.unsplash.com/photo-1459749411175-04bf5292ceea?auto=format&fit=crop&q=80&w=1000')] bg-cover bg-center"
   },
   {
     id: "private",
     title: "Private Parties",
     description: "Exclusive, intimate, and explosive. For milestone birthdays, anniversaries, and private soirées that demand a musical experience beyond the ordinary.",
     included: ["Customizable band size", "Tailored setlists", "Interactive performances", "DJ hybrid options"],
-    image: "bg-gradient-to-br from-black to-zinc-800"
+    image: "bg-[url('https://images.unsplash.com/photo-1533174000273-e18e1aa56e4c?auto=format&fit=crop&q=80&w=1000')] bg-cover bg-center"
+  },
+  {
+    id: "funerals",
+    title: "Funeral Services",
+    description: "Respectful, dignified, and elegant musical tributes. We provide beautiful arrangements to honor the lives of loved ones, blending traditional and contemporary sounds.",
+    included: ["Church ceremony acoustics", "Classy background music", "Traditional procession band", "Reverent solo performances"],
+    image: "bg-[url('https://images.unsplash.com/photo-1523580846011-d3a5ce2522eb?auto=format&fit=crop&q=80&w=1000')] bg-cover bg-center"
+  },
+  {
+    id: "led-screens",
+    title: "LED Screen Rentals",
+    description: "Crystal clear visual production for any scale. Our premium LED screens ensure every guest has a front-row experience, perfectly complementing our live performances.",
+    included: ["High-resolution LED walls", "Live camera feeds", "Custom visuals & graphics", "Professional AV setup"],
+    image: "bg-[url('https://images.unsplash.com/photo-1516280440502-39fe52c7104b?auto=format&fit=crop&q=80&w=1000')] bg-cover bg-center"
   }
 ];
 
@@ -180,42 +194,42 @@ export const pastEvents = [
     title: "Rhythms of Africa Festival",
     date: "Oct 2025",
     venue: "Independence Square",
-    image: "bg-gradient-to-br from-zinc-900 to-black"
+    image: "bg-[url('https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&q=80&w=1000')] bg-cover bg-center"
   },
   {
     id: 2,
     title: "Tech Summit 2025 Gala",
     date: "Sep 2025",
     venue: "Movenpick Ambassador Hotel",
-    image: "bg-gradient-to-br from-zinc-800 to-black"
+    image: "bg-[url('https://images.unsplash.com/photo-1505373877841-8d25f7d46678?auto=format&fit=crop&q=80&w=1000')] bg-cover bg-center"
   },
   {
     id: 3,
     title: "Asante Royal Wedding",
     date: "Aug 2025",
     venue: "Peduase Valley Resort",
-    image: "bg-gradient-to-br from-black to-zinc-900"
+    image: "bg-[url('https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&q=80&w=1000')] bg-cover bg-center"
   },
   {
     id: 4,
     title: "Accra Jazz Series",
     date: "Jun 2025",
     venue: "Alliance Française",
-    image: "bg-gradient-to-br from-zinc-900 to-zinc-800"
+    image: "bg-[url('https://images.unsplash.com/photo-1511192336575-5a79af67a629?auto=format&fit=crop&q=80&w=1000')] bg-cover bg-center"
   },
   {
     id: 5,
     title: "GCB Bank Awards",
     date: "Apr 2025",
     venue: "Kempinski Hotel Gold Coast City",
-    image: "bg-gradient-to-br from-black to-zinc-800"
+    image: "bg-[url('https://images.unsplash.com/photo-1505236858219-8359eb29e329?auto=format&fit=crop&q=80&w=1000')] bg-cover bg-center"
   },
   {
     id: 6,
     title: "The White Party",
     date: "Jan 2025",
     venue: "Labadi Beach",
-    image: "bg-gradient-to-br from-zinc-800 to-zinc-900"
+    image: "bg-[url('https://images.unsplash.com/photo-1429962714451-bb934ecdc4ec?auto=format&fit=crop&q=80&w=1000')] bg-cover bg-center"
   }
 ];
 
@@ -263,13 +277,13 @@ export const faqs = [
 ];
 
 export const galleryItems = [
-  { id: 1, type: "Photo", mood: "High-Energy", title: "Festival Main Stage", image: "bg-gradient-to-br from-zinc-900 to-black" },
-  { id: 2, type: "Video", mood: "Romantic", title: "First Dance", image: "bg-gradient-to-br from-zinc-800 to-black" },
-  { id: 3, type: "Photo", mood: "Corporate-Formal", title: "Gala Dinner Setup", image: "bg-gradient-to-br from-black to-zinc-900" },
-  { id: 4, type: "Photo", mood: "High-Energy", title: "Crowd Interaction", image: "bg-gradient-to-br from-zinc-900 to-zinc-800" },
-  { id: 5, type: "Video", mood: "Corporate-Formal", title: "Awards Ceremony Stings", image: "bg-gradient-to-br from-zinc-800 to-zinc-900" },
-  { id: 6, type: "Photo", mood: "Romantic", title: "Acoustic Ceremony", image: "bg-gradient-to-br from-black to-zinc-800" },
-  { id: 7, type: "Photo", mood: "High-Energy", title: "Brass Section Solo", image: "bg-gradient-to-br from-zinc-900 to-black" },
-  { id: 8, type: "Video", mood: "High-Energy", title: "Concert Highlight Reel", image: "bg-gradient-to-br from-zinc-800 to-black" },
-  { id: 9, type: "Photo", mood: "Corporate-Formal", title: "Jazz Cocktail Hour", image: "bg-gradient-to-br from-black to-zinc-900" }
+  { id: 1, type: "Photo", mood: "High-Energy", title: "Festival Main Stage", image: "bg-[url('https://images.unsplash.com/photo-1459749411175-04bf5292ceea?auto=format&fit=crop&q=80&w=1000')] bg-cover bg-center" },
+  { id: 2, type: "Video", mood: "Romantic", title: "First Dance", image: "bg-[url('https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&q=80&w=1000')] bg-cover bg-center" },
+  { id: 3, type: "Photo", mood: "Corporate-Formal", title: "Gala Dinner Setup", image: "bg-[url('https://images.unsplash.com/photo-1511795409834-432f7b1728d2?auto=format&fit=crop&q=80&w=1000')] bg-cover bg-center" },
+  { id: 4, type: "Photo", mood: "High-Energy", title: "Crowd Interaction", image: "bg-[url('https://images.unsplash.com/photo-1540039155732-68473678c2ec?auto=format&fit=crop&q=80&w=1000')] bg-cover bg-center" },
+  { id: 5, type: "Video", mood: "Corporate-Formal", title: "Awards Ceremony Stings", image: "bg-[url('https://images.unsplash.com/photo-1505236858219-8359eb29e329?auto=format&fit=crop&q=80&w=1000')] bg-cover bg-center" },
+  { id: 6, type: "Photo", mood: "Romantic", title: "Acoustic Ceremony", image: "bg-[url('https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&q=80&w=1000')] bg-cover bg-center" },
+  { id: 7, type: "Photo", mood: "High-Energy", title: "Brass Section Solo", image: "bg-[url('https://images.unsplash.com/photo-1511192336575-5a79af67a629?auto=format&fit=crop&q=80&w=1000')] bg-cover bg-center" },
+  { id: 8, type: "Video", mood: "High-Energy", title: "Concert Highlight Reel", image: "bg-[url('https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&q=80&w=1000')] bg-cover bg-center" },
+  { id: 9, type: "Photo", mood: "Corporate-Formal", title: "Jazz Cocktail Hour", image: "bg-[url('https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&q=80&w=1000')] bg-cover bg-center" }
 ];

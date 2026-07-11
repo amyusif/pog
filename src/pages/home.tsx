@@ -34,10 +34,18 @@ export default function Home() {
       <section className="relative h-[100dvh] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/60 to-black z-10" />
-          {/* Abstract placeholder for band performance */}
-          <div className="w-full h-full bg-zinc-900 flex items-center justify-center">
-            <div className="w-full h-full bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-primary/20 via-black to-black opacity-60 mix-blend-screen" />
-            <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPjxyZWN0IHdpZHRoPSI0IiBoZWlnaHQ9IjQiIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSIvPjwvc3ZnPg==')] opacity-30" />
+          <div className="w-full h-full bg-zinc-900 flex items-center justify-center relative">
+            <video 
+              autoPlay 
+              muted 
+              loop 
+              playsInline 
+              className="absolute inset-0 w-full h-full object-cover opacity-60 mix-blend-screen"
+            >
+              <source src="https://player.vimeo.com/external/494254418.sd.mp4?s=d010bb150d1822cbaf6b1e6191f6ccdbb4a11c81&profile_id=165&oauth2_token_id=57447761" type="video/mp4" />
+            </video>
+            <div className="w-full h-full absolute inset-0 bg-[url('https://images.unsplash.com/photo-1540039155732-68473678c2ec?auto=format&fit=crop&q=80&w=2070')] bg-cover bg-center mix-blend-overlay opacity-40" />
+            <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPjxyZWN0IHdpZHRoPSI0IiBoZWlnaHQ9IjQiIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSIvPjwvc3ZnPg==')] opacity-30 z-10" />
           </div>
         </div>
 
@@ -173,12 +181,21 @@ export default function Home() {
           <h2 className="text-3xl md:text-5xl font-serif font-bold text-white mb-12">Experience The Energy</h2>
           
           <div className="aspect-video max-w-5xl mx-auto rounded-sm overflow-hidden relative group cursor-pointer bg-zinc-900 border border-white/10 shadow-2xl">
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-20 h-20 bg-primary rounded-full flex items-center justify-center pl-1 group-hover:scale-110 transition-transform">
+            <video 
+              autoPlay 
+              muted 
+              loop 
+              playsInline 
+              className="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:opacity-70 transition-opacity duration-500"
+            >
+              <source src="https://player.vimeo.com/external/517090081.sd.mp4?s=d4f1cdfa643a60a72ef42849202c6b45070ff389&profile_id=165&oauth2_token_id=57447761" type="video/mp4" />
+            </video>
+            <div className="absolute inset-0 flex items-center justify-center z-10">
+              <div className="w-20 h-20 bg-primary rounded-full flex items-center justify-center pl-1 group-hover:scale-110 transition-transform shadow-xl">
                 <Video className="w-8 h-8 text-black" />
               </div>
             </div>
-            <div className="absolute bottom-6 left-6 text-left">
+            <div className="absolute bottom-6 left-6 text-left z-10">
               <div className="text-white font-bold text-xl drop-shadow-md">Powers of Grace - Live at Accra International Conference Centre</div>
               <div className="text-white/80 text-sm drop-shadow-md">Highlight Reel 2025</div>
             </div>

@@ -52,7 +52,9 @@ export default function Booking() {
           event: formData.eventType,
           date: new Date(formData.date).toISOString(),
           location: formData.venue,
-          budget: formData.package + (formData.addons.length ? ' (+' + formData.addons.join(', ') + ')' : '')
+          budget: formData.package + (formData.addons.length ? ' (+' + formData.addons.join(', ') + ')' : ''),
+          phone: formData.phone,
+          email: formData.email
         })
       });
 
