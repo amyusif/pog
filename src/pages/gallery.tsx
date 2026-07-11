@@ -27,7 +27,7 @@ export default function Gallery() {
             Gallery
           </h1>
           <p className="text-xl text-white/60 max-w-2xl mx-auto font-light mb-12">
-            See and feel the energy of Power of Grace.
+            See and feel the energy of Powers of Grace.
           </p>
 
           <div className="flex flex-col md:flex-row items-center justify-center gap-6 mb-8">

@@ -24,7 +24,7 @@ export default function FAQ() {
               Frequently Asked Questions
             </h1>
             <p className="text-xl text-white/60 max-w-2xl mx-auto font-light">
-              Everything you need to know about booking and working with Power of Grace.
+              Everything you need to know about booking and working with Powers of Grace.
             </p>
           </motion.div>
         </div>

@@ -15,7 +15,7 @@ export function Footer() {
               <div className="px-3 py-2 inline-block">
                 <img
                   src="/logo.png"
-                  alt="Power of Grace Events and Trading Limited"
+                  alt="Powers of Grace Events and Trading Limited"
                   className="h-20 w-auto object-contain"
                 />
               </div>
@@ -24,16 +24,16 @@ export function Footer() {
               Transforming events into transcendent experiences. A force of nature on stage, delivering soulful, expansive, and commanding live performances.
             </p>
             <div className="flex gap-4">
-              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Power of Grace on Instagram" className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-white/70 hover:bg-primary hover:text-black hover:border-primary transition-all">
+              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Powers of Grace on Instagram" className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-white/70 hover:bg-primary hover:text-black hover:border-primary transition-all">
                 <Instagram className="w-5 h-5" />
               </a>
-              <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" aria-label="Power of Grace on YouTube" className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-white/70 hover:bg-primary hover:text-black hover:border-primary transition-all">
+              <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" aria-label="Powers of Grace on YouTube" className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-white/70 hover:bg-primary hover:text-black hover:border-primary transition-all">
                 <Youtube className="w-5 h-5" />
               </a>
-              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" aria-label="Power of Grace on X (Twitter)" className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-white/70 hover:bg-primary hover:text-black hover:border-primary transition-all">
+              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" aria-label="Powers of Grace on X (Twitter)" className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-white/70 hover:bg-primary hover:text-black hover:border-primary transition-all">
                 <Twitter className="w-5 h-5" />
               </a>
-              <a href="https://music.apple.com" target="_blank" rel="noopener noreferrer" aria-label="Power of Grace on Apple Music" className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-white/70 hover:bg-primary hover:text-black hover:border-primary transition-all">
+              <a href="https://music.apple.com" target="_blank" rel="noopener noreferrer" aria-label="Powers of Grace on Apple Music" className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-white/70 hover:bg-primary hover:text-black hover:border-primary transition-all">
                 <Music className="w-5 h-5" />
               </a>
             </div>
@@ -60,7 +60,7 @@ export function Footer() {
               </li>
               <li className="flex items-start gap-3 text-white/60">
                 <Mail className="w-5 h-5 text-primary shrink-0 mt-0.5" />
-                <span>bookings@powerofgrace.com<br/>info@powerofgrace.com</span>
+                <span>bookings@powersofgrace.com<br/>info@powersofgrace.com</span>
               </li>
               <li className="flex items-start gap-3 text-white/60">
                 <MapPin className="w-5 h-5 text-primary shrink-0 mt-0.5" />
@@ -86,7 +86,7 @@ export function Footer() {
 
         <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-white/40 text-sm">
-            &copy; {new Date().getFullYear()} Power of Grace Live Band. All rights reserved.
+            &copy; {new Date().getFullYear()} Powers of Grace Live Band. All rights reserved.
           </p>
           <div className="flex gap-6 text-sm">
             <span className="text-white/40">Privacy Policy</span>

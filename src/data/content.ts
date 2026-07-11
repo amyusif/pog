@@ -3,7 +3,7 @@ export const bandMembers = [
     id: 1,
     name: "Emmanuel Asante",
     role: "Bandleader & Lead Guitar",
-    bio: "The visionary behind Power of Grace. Emmanuel's intricate riffs and soulful chords are the backbone of the band's signature sound. With over 15 years in the industry, his leadership brings out the best in every performance.",
+    bio: "The visionary behind Powers of Grace. Emmanuel's intricate riffs and soulful chords are the backbone of the band's signature sound. With over 15 years in the industry, his leadership brings out the best in every performance.",
     image: "bg-gradient-to-br from-zinc-800 to-zinc-900"
   },
   {
@@ -24,7 +24,7 @@ export const bandMembers = [
     id: 4,
     name: "Akua Sarpong",
     role: "Drums & Percussion",
-    bio: "The heartbeat of Power of Grace. Akua's polyrhythmic mastery drives the energy of every set. Her dynamic playing ensures that nobody stays seated when the groove kicks in.",
+    bio: "The heartbeat of Powers of Grace. Akua's polyrhythmic mastery drives the energy of every set. Her dynamic playing ensures that nobody stays seated when the groove kicks in.",
     image: "bg-gradient-to-br from-zinc-900 to-zinc-800"
   },
   {
@@ -38,7 +38,7 @@ export const bandMembers = [
     id: 6,
     name: "Kwame Owusu",
     role: "Trumpet & Brass",
-    bio: "The golden tone. Kwame's soaring trumpet lines add the majestic, celebratory flavor that defines the Power of Grace experience. His solos are legendary moments in every concert.",
+    bio: "The golden tone. Kwame's soaring trumpet lines add the majestic, celebratory flavor that defines the Powers of Grace experience. His solos are legendary moments in every concert.",
     image: "bg-gradient-to-br from-zinc-800 to-zinc-900"
   }
 ];
@@ -61,7 +61,7 @@ export const services = [
   {
     id: "concerts",
     title: "Concerts & Festivals",
-    description: "Power of Grace in our purest element. A commanding stage presence, virtuosic musicianship, and a setlist designed to take massive crowds on an emotional and rhythmic journey.",
+    description: "Powers of Grace in our purest element. A commanding stage presence, virtuosic musicianship, and a setlist designed to take massive crowds on an emotional and rhythmic journey.",
     included: ["Original arrangements", "Full technical rider", "Festival-ready setlist", "High-impact stage production"],
     image: "bg-gradient-to-br from-zinc-800 to-black"
   },
@@ -79,7 +79,7 @@ export const testimonials = [
     id: 1,
     name: "Sarah & Kofi Ansah",
     role: "Wedding Clients",
-    content: "Power of Grace didn't just play at our wedding; they made the wedding. The energy they brought during the reception had every single person on the dance floor. People are still talking about it months later.",
+    content: "Powers of Grace didn't just play at our wedding; they made the wedding. The energy they brought during the reception had every single person on the dance floor. People are still talking about it months later.",
     rating: 5,
     type: "Wedding"
   },
@@ -135,7 +135,7 @@ export const testimonials = [
     id: 8,
     name: "Victor Asare",
     role: "Event Planner",
-    content: "As an event planner, working with Power of Grace is a dream. They are punctual, professional, and their technical setup is flawless. They make my job incredibly easy.",
+    content: "As an event planner, working with Powers of Grace is a dream. They are punctual, professional, and their technical setup is flawless. They make my job incredibly easy.",
     rating: 5,
     type: "Corporate"
   }
@@ -226,7 +226,7 @@ export const faqs = [
   },
   {
     question: "Do you travel outside of Kumasi for events?",
-    answer: "Yes, Power of Grace is available for travel nationally and internationally. Travel and accommodation fees will be added to the booking quote based on the location."
+    answer: "Yes, Powers of Grace is available for travel nationally and internationally. Travel and accommodation fees will be added to the booking quote based on the location."
   },
   {
     question: "Can we request specific songs for our event?",
@@ -258,7 +258,7 @@ export const faqs = [
   },
   {
     question: "What happens if a band member is sick on the day?",
-    answer: "Power of Grace operates with a roster of world-class, rehearsed musicians. In the rare event of illness, we have top-tier substitute musicians who know our setlist and arrangements perfectly, ensuring zero compromise on quality."
+    answer: "Powers of Grace operates with a roster of world-class, rehearsed musicians. In the rare event of illness, we have top-tier substitute musicians who know our setlist and arrangements perfectly, ensuring zero compromise on quality."
   }
 ];
 

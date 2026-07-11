@@ -39,7 +39,7 @@ export default function About() {
               <h2 className="text-3xl md:text-5xl font-serif font-bold text-white mb-8">Our Origin</h2>
               <div className="space-y-6 text-white/70 text-lg leading-relaxed">
                 <p>
-                  Power of Grace began as a group of passionate musicians united by faith and music. What started in intimate venues has since evolved into one of Kumasi's most sought-after live acts for events that demand absolute excellence.
+                  Powers of Grace began as a group of passionate musicians united by faith and music. What started in intimate venues has since evolved into one of Kumasi's most sought-after live acts for events that demand absolute excellence.
                 </p>
                 <p>
                   We believe that live music is a conversation between the stage and the audience. Our sound is deeply rooted in Afrobeat rhythms, elevated by gospel-infused vocal energy, and refined with jazz sophistication.
@@ -73,7 +73,7 @@ export default function About() {
         <div className="container mx-auto px-6 md:px-12">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-6xl font-serif font-bold text-white mb-4">Meet The Collective</h2>
-            <p className="text-white/60 text-lg max-w-2xl mx-auto">The world-class musicians behind the signature Power of Grace sound.</p>
+            <p className="text-white/60 text-lg max-w-2xl mx-auto">The world-class musicians behind the signature Powers of Grace sound.</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">

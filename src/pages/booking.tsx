@@ -35,12 +35,38 @@ export default function Booking() {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Simulate API call
-    setTimeout(() => {
-      setSubmitted(true);
-    }, 1000);
+    setIsSubmitting(true);
+    
+    try {
+      const response = await fetch('https://server-bay-ten-49.vercel.app/api/bookings', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          client: formData.name,
+          event: formData.eventType,
+          date: new Date(formData.date).toISOString(),
+          location: formData.venue,
+          budget: formData.package + (formData.addons.length ? ' (+' + formData.addons.join(', ') + ')' : '')
+        })
+      });
+
+      if (response.ok) {
+        setSubmitted(true);
+      } else {
+        alert("There was an error submitting your request. Please try again.");
+      }
+    } catch (error) {
+      console.error("Booking error:", error);
+      alert("Network error. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const nextStep = () => setStep(s => Math.min(s + 1, 6));
@@ -72,7 +98,7 @@ export default function Booking() {
             </div>
             <h1 className="text-4xl font-serif font-bold text-white mb-4">Request Received</h1>
             <p className="text-white/60 text-lg mb-8">
-              Thank you for considering Power of Grace for your event. Our team will review your details and respond within 24 hours with a custom proposal.
+              Thank you for considering Powers of Grace for your event. Our team will review your details and respond within 24 hours with a custom proposal.
             </p>
             <Button onClick={() => window.location.href='/'}>Return to Home</Button>
           </motion.div>
@@ -330,10 +356,10 @@ export default function Booking() {
                   ) : (
                     <Button 
                       onClick={handleSubmit}
-                      disabled={!isStepValid()}
+                      disabled={!isStepValid() || isSubmitting}
                       className="bg-primary text-black font-bold"
                     >
-                      Submit Request
+                      {isSubmitting ? "Submitting..." : "Submit Request"}
                     </Button>
                   )}
                 </div>

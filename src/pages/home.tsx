@@ -58,7 +58,7 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.2, delay: 0.4 }}
           >
-            POWER OF GRACE
+            POWERS OF GRACE
           </motion.h1>
           
           <motion.p 
@@ -179,7 +179,7 @@ export default function Home() {
               </div>
             </div>
             <div className="absolute bottom-6 left-6 text-left">
-              <div className="text-white font-bold text-xl drop-shadow-md">Power of Grace - Live at Accra International Conference Centre</div>
+              <div className="text-white font-bold text-xl drop-shadow-md">Powers of Grace - Live at Accra International Conference Centre</div>
               <div className="text-white/80 text-sm drop-shadow-md">Highlight Reel 2025</div>
             </div>
           </div>
@@ -301,7 +301,7 @@ export default function Home() {
         <div className="relative flex overflow-hidden">
           <div className="flex gap-6 animate-marquee-right whitespace-nowrap">
             {[
-              "Power of Grace saved my 50th birthday.",
+              "Powers of Grace saved my 50th birthday.",
               "Guests are STILL talking about it.",
               "Tunde's trumpet solo had the whole hall gasping.",
               "10 out of 10 — no notes.",
@@ -309,7 +309,7 @@ export default function Home() {
               "Chinwe's voice is a gift to humanity.",
               "Every single song felt like it was played just for us.",
               "Worth every single cedi, and then some.",
-              "Power of Grace saved my 50th birthday.",
+              "Powers of Grace saved my 50th birthday.",
               "Guests are STILL talking about it.",
               "Tunde's trumpet solo had the whole hall gasping.",
               "10 out of 10 — no notes.",

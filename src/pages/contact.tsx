@@ -49,8 +49,8 @@ export default function Contact() {
                   </div>
                   <div>
                     <h3 className="text-white font-bold mb-1">Email Us</h3>
-                    <p className="text-white/60">bookings@powerofgrace.com</p>
-                    <p className="text-white/60">info@powerofgrace.com</p>
+                    <p className="text-white/60">bookings@powersofgrace.com</p>
+                    <p className="text-white/60">info@powersofgrace.com</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-6">
@@ -67,13 +67,13 @@ export default function Contact() {
               <div>
                 <h3 className="text-white font-bold mb-4">Follow Our Journey</h3>
                 <div className="flex gap-4">
-                  <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Power of Grace on Instagram" className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center text-white hover:bg-primary hover:text-black hover:border-primary transition-all">
+                  <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Powers of Grace on Instagram" className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center text-white hover:bg-primary hover:text-black hover:border-primary transition-all">
                     <Instagram className="w-5 h-5" />
                   </a>
-                  <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" aria-label="Power of Grace on YouTube" className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center text-white hover:bg-primary hover:text-black hover:border-primary transition-all">
+                  <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" aria-label="Powers of Grace on YouTube" className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center text-white hover:bg-primary hover:text-black hover:border-primary transition-all">
                     <Youtube className="w-5 h-5" />
                   </a>
-                  <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" aria-label="Power of Grace on X (Twitter)" className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center text-white hover:bg-primary hover:text-black hover:border-primary transition-all">
+                  <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" aria-label="Powers of Grace on X (Twitter)" className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center text-white hover:bg-primary hover:text-black hover:border-primary transition-all">
                     <Twitter className="w-5 h-5" />
                   </a>
                 </div>

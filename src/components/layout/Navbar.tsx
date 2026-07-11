@@ -84,7 +84,7 @@ export function Navbar() {
             <div className="px-2 py-1">
               <img
                 src="/logo.png"
-                alt="Power of Grace Events and Trading Limited"
+                alt="Powers of Grace Events and Trading Limited"
                 className="h-20 md:h-28 w-auto object-contain transition-opacity group-hover:opacity-80"
               />
             </div>
@@ -230,7 +230,7 @@ export function Navbar() {
             <div className="flex items-center justify-between p-6 border-b border-white/10">
               <img
                 src="/logo.png"
-                alt="Power of Grace Events and Trading Limited"
+                alt="Powers of Grace Events and Trading Limited"
                 className="h-20 w-auto object-contain brightness-0 invert"
               />
               <button
