@@ -56,7 +56,8 @@ export default function Booking() {
           budget: formData.package + (formData.addons.length ? ' (+' + formData.addons.join(', ') + ')' : ''),
           bookingType: formData.bookingType,
           phone: formData.phone,
-          email: formData.email
+          email: formData.email,
+          time: formData.time
         })
       });
 
