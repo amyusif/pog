@@ -9,6 +9,7 @@ export default function Booking() {
   const [submitted, setSubmitted] = useState(false);
   
   const [formData, setFormData] = useState({
+    bookingType: "",
     eventType: "",
     date: "",
     time: "",
@@ -53,6 +54,7 @@ export default function Booking() {
           date: new Date(formData.date).toISOString(),
           location: formData.venue,
           budget: formData.package + (formData.addons.length ? ' (+' + formData.addons.join(', ') + ')' : ''),
+          bookingType: formData.bookingType,
           phone: formData.phone,
           email: formData.email
         })
@@ -71,17 +73,18 @@ export default function Booking() {
     }
   };
 
-  const nextStep = () => setStep(s => Math.min(s + 1, 6));
+  const nextStep = () => setStep(s => Math.min(s + 1, 7));
   const prevStep = () => setStep(s => Math.max(s - 1, 1));
 
   const isStepValid = () => {
     switch(step) {
-      case 1: return formData.eventType !== "";
-      case 2: return formData.date !== "";
-      case 3: return formData.venue !== "";
-      case 4: return formData.package !== "";
-      case 5: return true; // addons optional
-      case 6: return formData.name !== "" && formData.email !== "";
+      case 1: return formData.bookingType !== "";
+      case 2: return formData.eventType !== "";
+      case 3: return formData.date !== "";
+      case 4: return formData.venue !== "";
+      case 5: return formData.package !== "";
+      case 6: return true; // addons optional
+      case 7: return formData.name !== "" && formData.email !== "";
       default: return false;
     }
   };
@@ -127,7 +130,7 @@ export default function Booking() {
               {/* Progress Bar */}
               <div className="mb-12">
                 <div className="flex justify-between mb-2">
-                  {[1, 2, 3, 4, 5, 6].map(num => (
+                  {[1, 2, 3, 4, 5, 6, 7].map(num => (
                     <div 
                       key={num} 
                       className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold border-2 transition-colors ${
@@ -142,7 +145,7 @@ export default function Booking() {
                 <div className="h-1 bg-white/10 w-full rounded-full overflow-hidden">
                   <div 
                     className="h-full bg-primary transition-all duration-300"
-                    style={{ width: `${((step - 1) / 5) * 100}%` }}
+                    style={{ width: `${((step - 1) / 6) * 100}%` }}
                   />
                 </div>
               </div>
@@ -152,6 +155,28 @@ export default function Booking() {
                   
                   {step === 1 && (
                     <motion.div key="step1" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
+                      <h2 className="text-2xl font-serif font-bold text-white mb-6">What would you like to book?</h2>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        {["Live Band", "LED Screens"].map(type => (
+                          <button
+                            key={type}
+                            type="button"
+                            onClick={() => updateForm('bookingType', type)}
+                            className={`p-4 border text-left rounded-sm transition-all ${
+                              formData.bookingType === type
+                              ? "border-primary bg-primary/10 text-primary font-bold"
+                              : "border-white/10 text-white/70 hover:border-white/30"
+                            }`}
+                          >
+                            {type}
+                          </button>
+                        ))}
+                      </div>
+                    </motion.div>
+                  )}
+
+                  {step === 2 && (
+                    <motion.div key="step2" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
                       <h2 className="text-2xl font-serif font-bold text-white mb-6">What type of event is this?</h2>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         {["Wedding", "Corporate Event", "Private Party", "Concert/Festival", "Birthday", "Other"].map(type => (
@@ -172,8 +197,8 @@ export default function Booking() {
                     </motion.div>
                   )}
 
-                  {step === 2 && (
-                    <motion.div key="step2" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
+                  {step === 3 && (
+                    <motion.div key="step3" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
                       <h2 className="text-2xl font-serif font-bold text-white mb-6">When is the event?</h2>
                       <div className="space-y-6">
                         <div>
@@ -198,8 +223,8 @@ export default function Booking() {
                     </motion.div>
                   )}
 
-                  {step === 3 && (
-                    <motion.div key="step3" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
+                  {step === 4 && (
+                    <motion.div key="step4" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
                       <h2 className="text-2xl font-serif font-bold text-white mb-6">Where is it happening?</h2>
                       <div className="space-y-6">
                         <div>
@@ -231,8 +256,8 @@ export default function Booking() {
                     </motion.div>
                   )}
 
-                  {step === 4 && (
-                    <motion.div key="step4" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
+                  {step === 5 && (
+                    <motion.div key="step5" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
                       <h2 className="text-2xl font-serif font-bold text-white mb-6">Select a Package</h2>
                       <div className="space-y-4">
                         {[
@@ -262,8 +287,8 @@ export default function Booking() {
                     </motion.div>
                   )}
 
-                  {step === 5 && (
-                    <motion.div key="step5" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
+                  {step === 6 && (
+                    <motion.div key="step6" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
                       <h2 className="text-2xl font-serif font-bold text-white mb-6">Add-ons (Optional)</h2>
                       <div className="space-y-3">
                         {[
@@ -286,8 +311,8 @@ export default function Booking() {
                     </motion.div>
                   )}
 
-                  {step === 6 && (
-                    <motion.div key="step6" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
+                  {step === 7 && (
+                    <motion.div key="step7" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
                       <h2 className="text-2xl font-serif font-bold text-white mb-6">Your Details</h2>
                       <form onSubmit={handleSubmit} className="space-y-6">
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -348,7 +373,7 @@ export default function Booking() {
                     <ArrowLeft className="w-4 h-4 mr-2" /> Back
                   </Button>
                   
-                  {step < 6 ? (
+                  {step < 7 ? (
                     <Button 
                       onClick={nextStep}
                       disabled={!isStepValid()}
@@ -375,7 +400,12 @@ export default function Booking() {
                 
                 <div className="space-y-4 text-sm">
                   <div>
-                    <div className="text-white/40 uppercase tracking-widest text-xs mb-1">Type</div>
+                    <div className="text-white/40 uppercase tracking-widest text-xs mb-1">Booking Type</div>
+                    <div className="text-white font-medium">{formData.bookingType || "—"}</div>
+                  </div>
+                  
+                  <div>
+                    <div className="text-white/40 uppercase tracking-widest text-xs mb-1">Service</div>
                     <div className="text-white font-medium">{formData.eventType || "—"}</div>
                   </div>
                   
