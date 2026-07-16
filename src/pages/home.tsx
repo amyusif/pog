@@ -33,16 +33,22 @@ export default function Home() {
       {/* Hero Section */}
       <section className="relative h-[100dvh] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 z-0">
-          {/* Dark overlay for text legibility */}
+          {/* Dark gradient overlay for text legibility */}
           <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/60 to-black z-10" />
-          {/* Hero background image */}
+          {/* Layer 1: blurred + darkened fill — eliminates black bars at edges */}
+          <img
+            src="/hero-bg-orange.jpg"
+            alt=""
+            aria-hidden="true"
+            className="absolute inset-0 w-full h-full object-cover scale-110 blur-2xl opacity-60"
+          />
+          {/* Layer 2: full crisp image — all details visible, no cropping */}
           <img
             src="/hero-bg-orange.jpg"
             alt="Powers of Grace Live Stage"
             className="absolute inset-0 w-full h-full object-contain object-center"
-            style={{ background: '#000' }}
           />
-          {/* Subtle noise/grain texture overlay */}
+          {/* Subtle grain texture */}
           <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPjxyZWN0IHdpZHRoPSI0IiBoZWlnaHQ9IjQiIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSIvPjwvc3ZnPg==')] opacity-20 z-10" />
         </div>
 
