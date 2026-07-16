@@ -35,18 +35,11 @@ export default function Home() {
         <div className="absolute inset-0 z-0">
           {/* Dark gradient overlay for text legibility */}
           <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/60 to-black z-10" />
-          {/* Layer 1: blurred + darkened fill — eliminates black bars at edges */}
-          <img
-            src="/hero-bg-orange.jpg"
-            alt=""
-            aria-hidden="true"
-            className="absolute inset-0 w-full h-full object-cover scale-110 blur-2xl opacity-60"
-          />
-          {/* Layer 2: full crisp image — all details visible, no cropping */}
+          {/* Stretched image — covers full width/height without cropping details */}
           <img
             src="/hero-bg-orange.jpg"
             alt="Powers of Grace Live Stage"
-            className="absolute inset-0 w-full h-full object-contain object-center"
+            className="absolute inset-0 w-full h-full object-fill opacity-90"
           />
           {/* Subtle grain texture */}
           <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPjxyZWN0IHdpZHRoPSI0IiBoZWlnaHQ9IjQiIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSIvPjwvc3ZnPg==')] opacity-20 z-10" />
