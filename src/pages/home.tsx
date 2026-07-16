@@ -37,7 +37,7 @@ export default function Home() {
           <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/60 to-black z-10" />
           {/* Hero background image */}
           <img
-            src="/hero-bg.png"
+            src="/hero-bg.jpg"
             alt="Powers of Grace Live Stage"
             className="absolute inset-0 w-full h-full object-cover object-center opacity-70"
           />
