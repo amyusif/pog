@@ -39,7 +39,8 @@ export default function Home() {
           <img
             src="/hero-bg-orange.jpg"
             alt="Powers of Grace Live Stage"
-            className="absolute inset-0 w-full h-full object-cover object-center opacity-70"
+            className="absolute inset-0 w-full h-full object-contain object-center"
+            style={{ background: '#000' }}
           />
           {/* Subtle noise/grain texture overlay */}
           <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPjxyZWN0IHdpZHRoPSI0IiBoZWlnaHQ9IjQiIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSIvPjwvc3ZnPg==')] opacity-20 z-10" />
