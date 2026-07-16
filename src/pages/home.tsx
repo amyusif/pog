@@ -33,20 +33,16 @@ export default function Home() {
       {/* Hero Section */}
       <section className="relative h-[100dvh] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/60 to-black z-10" />
-          <div className="w-full h-full bg-zinc-900 flex items-center justify-center relative">
-            <video 
-              autoPlay 
-              muted 
-              loop 
-              playsInline 
-              className="absolute inset-0 w-full h-full object-cover opacity-60 mix-blend-screen"
-            >
-              <source src="https://player.vimeo.com/external/494254418.sd.mp4?s=d010bb150d1822cbaf6b1e6191f6ccdbb4a11c81&profile_id=165&oauth2_token_id=57447761" type="video/mp4" />
-            </video>
-            <div className="w-full h-full absolute inset-0 bg-[url('https://images.unsplash.com/photo-1540039155732-68473678c2ec?auto=format&fit=crop&q=80&w=2070')] bg-cover bg-center mix-blend-overlay opacity-40" />
-            <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPjxyZWN0IHdpZHRoPSI0IiBoZWlnaHQ9IjQiIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSIvPjwvc3ZnPg==')] opacity-30 z-10" />
-          </div>
+          {/* Dark overlay for text legibility */}
+          <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/60 to-black z-10" />
+          {/* Hero background image */}
+          <img
+            src="/hero-bg.png"
+            alt="Powers of Grace Live Stage"
+            className="absolute inset-0 w-full h-full object-cover object-center opacity-70"
+          />
+          {/* Subtle noise/grain texture overlay */}
+          <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPjxyZWN0IHdpZHRoPSI0IiBoZWlnaHQ9IjQiIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSIvPjwvc3ZnPg==')] opacity-20 z-10" />
         </div>
 
         <div className="container mx-auto px-6 relative z-20 text-center">
