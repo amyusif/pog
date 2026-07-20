@@ -70,6 +70,8 @@ const EVENT_SERVICES = [
   "Concert / Festival",
   "Birthday",
   "Traditional Ceremony",
+  "Gospel Rock Show",
+  "SRC Programs",
   "Other",
 ];
 

@@ -85,6 +85,20 @@ export const services = [
     description: "Crystal clear visual production for any scale. Our premium LED screens ensure every guest has a front-row experience, perfectly complementing our live performances.",
     included: ["High-resolution LED walls", "Live camera feeds", "Custom visuals & graphics", "Professional AV setup"],
     image: "bg-[url('https://images.unsplash.com/photo-1516280440502-39fe52c7104b?auto=format&fit=crop&q=80&w=1000')] bg-cover bg-center"
+  },
+  {
+    id: "gospel-rock",
+    title: "Gospel Rock Show",
+    description: "High-energy, spiritually uplifting gospel rock performances. We bring powerful vocals, electric guitar solos, and driving rhythms to create an atmosphere of explosive praise and worship.",
+    included: ["Dynamic worship sets", "Rock-infused arrangements", "Engaging crowd interaction", "High-energy praise"],
+    image: "bg-[url('https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&q=80&w=1000')] bg-cover bg-center"
+  },
+  {
+    id: "src-programs",
+    title: "SRC Programs",
+    description: "Tailored live band entertainment for university Student Representative Council (SRC) weeks, akwaaba nights, and campus events. We know how to keep students on their feet all night.",
+    included: ["Contemporary hit covers", "High-energy dance sets", "Campus festival production", "Guest artist backing"],
+    image: "bg-[url('https://images.unsplash.com/photo-1459749411175-04bf5292ceea?auto=format&fit=crop&q=80&w=1000')] bg-cover bg-center"
   }
 ];
 
