@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion, useMotionValue, useTransform, animate } from "framer-motion";
 import { Link } from "wouter";
 import { useEffect, useState } from "react";
 import { Layout } from "@/components/layout/Layout";
@@ -24,33 +24,22 @@ function useCountdown(targetDate: Date) {
   return timeLeft;
 }
 
-function useTypewriter(text: string, speed: number = 150, pause: number = 3000) {
-  const [displayedText, setDisplayedText] = useState("");
-  const [isDeleting, setIsDeleting] = useState(false);
+function useTypewriter(text: string) {
+  const count = useMotionValue(0);
+  const rounded = useTransform(count, (latest) => Math.round(latest));
+  const displayedText = useTransform(rounded, (latest) => text.slice(0, latest));
 
   useEffect(() => {
-    let timer: NodeJS.Timeout;
-
-    if (!isDeleting && displayedText.length < text.length) {
-      timer = setTimeout(() => {
-        setDisplayedText(text.slice(0, displayedText.length + 1));
-      }, speed);
-    } else if (!isDeleting && displayedText.length === text.length) {
-      timer = setTimeout(() => {
-        setIsDeleting(true);
-      }, pause);
-    } else if (isDeleting && displayedText.length > 0) {
-      timer = setTimeout(() => {
-        setDisplayedText(text.slice(0, displayedText.length - 1));
-      }, speed / 2);
-    } else if (isDeleting && displayedText.length === 0) {
-      timer = setTimeout(() => {
-        setIsDeleting(false);
-      }, 500);
-    }
-
-    return () => clearTimeout(timer);
-  }, [displayedText, isDeleting, text, speed, pause]);
+    const controls = animate(count, text.length, {
+      type: "tween",
+      duration: text.length * 0.12, // 120ms per character
+      ease: "linear",
+      repeat: Infinity,
+      repeatType: "reverse",
+      repeatDelay: 3, // Pause for 3 seconds before deleting
+    });
+    return controls.stop;
+  }, [count, text.length]);
 
   return displayedText;
 }
@@ -59,7 +48,7 @@ const SHOW_DATE = new Date("2026-12-20T19:00:00+00:00");
 
 export default function Home() {
   const countdown = useCountdown(SHOW_DATE);
-  const typedText = useTypewriter("POWERS OF GRACE", 120, 3000);
+  const typedText = useTypewriter("POWERS OF GRACE");
 
   return (
     <Layout>
@@ -90,7 +79,7 @@ export default function Home() {
           </motion.div>
           
           <h1 className="text-5xl md:text-7xl lg:text-9xl font-serif font-bold text-white mb-8 tracking-tighter leading-none min-h-[1em]">
-            {typedText}
+            <motion.span>{typedText}</motion.span>
             <span className="animate-pulse">|</span>
           </h1>
           
