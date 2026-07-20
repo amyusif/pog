@@ -93,6 +93,7 @@ export default function Booking() {
     email: "",
     phone: "",
     requests: "",
+    clientBudget: "",
   });
 
   const update = (key: string, value: string) =>
@@ -115,14 +116,28 @@ export default function Booking() {
       subType: type,
       package: "",
       customSpec: "",
+      clientBudget: "",
     }));
   };
+
+  const getPackageOptions = () => {
+    if (formData.bookingType === "LED Screens") return LED_PACKAGES;
+    if (formData.subType === "Musical Instrument Rentals") return RENTAL_PACKAGES;
+    if (formData.subType === "Live Event") return LIVE_EVENT_OPTIONS;
+    return [];
+  };
+
+  const packageOptions = getPackageOptions();
+  const selectedPackage = packageOptions.find((opt) => opt.id === formData.package);
+  const packageHasRange = selectedPackage ? selectedPackage.price.includes("–") : false;
 
   // Dynamic step keys based on user choices
   const getStepKeys = () => {
     const s = ["bookingType"];
     if (formData.bookingType === "Live Band") s.push("subType");
-    s.push("package", "eventType", "when", "where", "details");
+    s.push("package");
+    if (packageHasRange) s.push("budgetAmount");
+    s.push("eventType", "when", "where", "details");
     return s;
   };
 
@@ -135,6 +150,7 @@ export default function Booking() {
       case "bookingType": return !!formData.bookingType;
       case "subType":     return !!formData.subType;
       case "package":     return !!formData.package;
+      case "budgetAmount":return !!formData.clientBudget;
       case "eventType":   return !!formData.eventType;
       case "when":        return !!formData.date;
       case "where":       return !!formData.venue;
@@ -148,15 +164,7 @@ export default function Booking() {
   };
   const prevStep = () => setStep((s) => Math.max(1, s - 1));
 
-  // Package options depend on booking type & sub type
-  const getPackageOptions = () => {
-    if (formData.bookingType === "LED Screens") return LED_PACKAGES;
-    if (formData.subType === "Musical Instrument Rentals") return RENTAL_PACKAGES;
-    if (formData.subType === "Live Event") return LIVE_EVENT_OPTIONS;
-    return [];
-  };
 
-  const packageOptions = getPackageOptions();
 
   const packageStepTitle = () => {
     if (formData.subType === "Live Event") return "Select Location / Coverage";
@@ -193,6 +201,7 @@ export default function Booking() {
           phone: formData.phone,
           email: formData.email,
           time: formData.time,
+          clientBudget: formData.clientBudget,
         }),
       });
       if (!res.ok) throw new Error("Failed");
@@ -516,6 +525,35 @@ export default function Booking() {
                     </motion.div>
                   )}
 
+                  {/* ── STEP: Budget (If package has range) ────────── */}
+                  {currentKey === "budgetAmount" && (
+                    <motion.div
+                      key="budgetAmount"
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -20 }}
+                    >
+                      <h2 className="text-2xl font-serif font-bold text-white mb-2">
+                        What's your budget?
+                      </h2>
+                      <p className="text-white/40 text-sm mb-8">
+                        The package you selected has a flexible price range ({selectedPackage?.price}). Let us know your target budget.
+                      </p>
+                      <div>
+                        <label className="block text-sm font-bold text-white/70 mb-2">
+                          Enter your budget (GH₵)
+                        </label>
+                        <input
+                          type="number"
+                          placeholder="e.g. 5000"
+                          value={formData.clientBudget}
+                          onChange={(e) => update("clientBudget", e.target.value)}
+                          className="w-full bg-black border border-white/10 p-4 text-white rounded-sm focus:border-primary focus:outline-none"
+                        />
+                      </div>
+                    </motion.div>
+                  )}
+
                   {/* ── STEP: Event / Service Type ──────────────────── */}
                   {currentKey === "eventType" && (
                     <motion.div
@@ -810,6 +848,17 @@ export default function Booking() {
                         {formData.package === "Other"
                           ? "Custom"
                           : formData.package}
+                      </div>
+                    </div>
+                  )}
+
+                  {formData.clientBudget && (
+                    <div>
+                      <div className="text-white/40 uppercase tracking-widest text-xs mb-1">
+                        Budget
+                      </div>
+                      <div className="text-white font-medium">
+                        GH₵{formData.clientBudget}
                       </div>
                     </div>
                   )}
