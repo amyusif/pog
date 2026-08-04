@@ -36,7 +36,7 @@ export function Layout({ children }: { children: ReactNode }) {
           className="pointer-events-auto"
         >
           <a 
-            href="https://wa.me/2348001234567" 
+            href="https://wa.me/233599846316" 
             target="_blank" 
             rel="noopener noreferrer"
             className="w-14 h-14 bg-[#25D366] text-white rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform"
