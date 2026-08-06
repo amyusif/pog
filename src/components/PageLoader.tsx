@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 // Flag persists during client-side navigation within a single session,
 // but resets when the user reloads/refreshes the browser.
-let hasLoadedInitialPage = false;
+export let hasLoadedInitialPage = false;
 
 export function PageLoader() {
   const [loading, setLoading] = useState(() => !hasLoadedInitialPage);
@@ -44,6 +44,7 @@ export function PageLoader() {
           if (prev >= 100) {
             clearInterval(interval);
             hasLoadedInitialPage = true;
+            window.dispatchEvent(new Event('pageloader-complete'));
             setTimeout(() => setLoading(false), 400);
             return 100;
           }

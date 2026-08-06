@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, Music, Star, Calendar, MapPin, Users, Video } from "lucide-react";
 import { services, testimonials, upcomingEvents } from "@/data/content";
 import { useScrollReveal, fadeUp, fadeIn, fadeLeft, fadeRight, scaleIn, staggerContainer, staggerContainerFast, smoothEase } from '@/hooks/useScrollReveal';
+import { hasLoadedInitialPage } from "@/components/PageLoader";
 
 function useCountdown(targetDate: Date) {
   const calculate = () => {
@@ -81,25 +82,42 @@ export default function Home() {
   const { scrollY } = useScroll();
   const heroY = useTransform(scrollY, [0, 1000], ["0%", "50%"]);
 
+  const [loaderFinished, setLoaderFinished] = useState(() => hasLoadedInitialPage);
+
+  useEffect(() => {
+    if (hasLoadedInitialPage) {
+      setLoaderFinished(true);
+      return;
+    }
+    const handleComplete = () => setLoaderFinished(true);
+    window.addEventListener('pageloader-complete', handleComplete);
+    return () => window.removeEventListener('pageloader-complete', handleComplete);
+  }, []);
+
   return (
     <Layout>
       {/* Hero Section */}
       <section className="relative h-[100dvh] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 z-0">
           {/* Background overlay for text legibility */}
-          <div className="absolute inset-0 bg-gradient-to-b from-background/75 via-background/35 to-background dark:from-black/50 dark:via-black/40 dark:to-black z-10" />
+          <div className="absolute inset-0 bg-gradient-to-b from-background/90 via-background/60 to-background dark:from-black/75 dark:via-black/65 dark:to-black z-10" />
           {/* Hero background image with Parallax */}
           <motion.img
-            src="/hero-bg.jpg"
+            src="https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?q=80&w=2070&auto=format&fit=crop"
             alt="Powers of Grace Live Stage"
-            className="absolute inset-0 w-full h-full object-cover object-center opacity-65 dark:opacity-80"
+            className="absolute inset-0 w-full h-full object-cover object-center opacity-45 dark:opacity-55"
             style={{ y: heroY }}
           />
           {/* Subtle noise/grain texture overlay */}
           <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPjxyZWN0IHdpZHRoPSI0IiBoZWlnaHQ9IjQiIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSIvPjwvc3ZnPg==')] opacity-20 z-10" />
         </div>
 
-        <div className="container mx-auto px-6 relative z-20 text-center">
+        <motion.div 
+          className="container mx-auto px-6 relative z-20 text-center"
+          initial={hasLoadedInitialPage ? false : { opacity: 0, y: 35, scale: 0.97 }}
+          animate={loaderFinished ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 35, scale: 0.97 }}
+          transition={{ duration: 1, ease: smoothEase, delay: 0.15 }}
+        >
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -110,13 +128,13 @@ export default function Home() {
             </span>
           </motion.div>
           
-          <h1 className="text-5xl md:text-7xl lg:text-9xl font-serif font-bold text-foreground dark:text-white mb-8 tracking-tighter leading-none min-h-[1em]">
+          <h1 className="text-5xl md:text-7xl lg:text-9xl font-serif font-bold text-foreground/90 dark:text-zinc-300 mb-8 tracking-tighter leading-none min-h-[1em]">
             <motion.span>{typedText}</motion.span>
             <span className="animate-pulse">|</span>
           </h1>
           
           <motion.p 
-            className="text-xl md:text-2xl text-foreground/80 dark:text-white/80 max-w-2xl mx-auto mb-12 font-light"
+            className="text-xl md:text-2xl text-muted-foreground dark:text-zinc-400 max-w-2xl mx-auto mb-12 font-light"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1, delay: 0.8, ease: smoothEase }}
@@ -142,7 +160,7 @@ export default function Home() {
               </Button>
             </Link>
           </motion.div>
-        </div>
+        </motion.div>
 
         {/* Scroll indicator */}
         <motion.div 
