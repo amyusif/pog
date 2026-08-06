@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { CheckCircle2, ArrowRight, ArrowLeft } from "lucide-react";
+import { fadeUp, staggerContainer, smoothEase } from '@/hooks/useScrollReveal';
 
 // ── Pricing configs ─────────────────────────────────────────────────────────
 const LIVE_EVENT_OPTIONS = [
@@ -156,7 +157,7 @@ export default function Booking() {
       case "eventType":   return !!formData.eventType;
       case "when":        return !!formData.date;
       case "where":       return !!formData.venue;
-      case "details":     return !!formData.name && !!formData.email;
+      case "details":     return !!formData.name && !!formData.email && !!formData.phone;
       default:            return false;
     }
   };
@@ -165,8 +166,6 @@ export default function Booking() {
     if (step < totalSteps) setStep((s) => s + 1);
   };
   const prevStep = () => setStep((s) => Math.max(1, s - 1));
-
-
 
   const packageStepTitle = () => {
     if (formData.subType === "Live Event") return "Select Location / Coverage";
@@ -219,23 +218,25 @@ export default function Booking() {
   if (submitted) {
     return (
       <Layout>
-        <section className="pt-40 pb-32 bg-black min-h-[80vh] flex items-center justify-center">
+        <section className="pt-48 pb-36 bg-background min-h-screen flex items-center justify-center relative overflow-hidden">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/10 rounded-full blur-[120px] mix-blend-screen pointer-events-none" />
           <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="text-center max-w-xl mx-auto px-6"
+            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{ duration: 0.5, ease: smoothEase }}
+            className="text-center max-w-xl mx-auto px-6 relative z-10 bg-card p-12 rounded-2xl border border-border shadow-xl"
           >
             <div className="w-24 h-24 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-8">
               <CheckCircle2 className="w-12 h-12 text-primary" />
             </div>
-            <h1 className="text-4xl font-serif font-bold text-white mb-4">
+            <h1 className="text-4xl font-serif font-medium text-foreground mb-4">
               Request Received
             </h1>
-            <p className="text-white/60 text-lg mb-8">
+            <p className="text-muted-foreground text-lg mb-10 leading-relaxed">
               Thank you for choosing Powers of Grace. Our team will review your
               request and get back to you within 24 hours with a custom proposal.
             </p>
-            <Button onClick={() => (window.location.href = "/")}>
+            <Button size="lg" className="rounded-full px-8" onClick={() => (window.location.href = "/")}>
               Return to Home
             </Button>
           </motion.div>
@@ -248,40 +249,53 @@ export default function Booking() {
   return (
     <Layout>
       {/* Hero */}
-      <section className="pt-32 pb-12 bg-zinc-950 border-b border-white/5">
-        <div className="container mx-auto px-6 md:px-12 text-center">
-          <h1 className="text-4xl md:text-6xl font-serif font-bold text-white mb-6">
-            Make a Booking
-          </h1>
-          <p className="text-white/60 max-w-2xl mx-auto">
-            Fill out the details below to check our availability and receive a
-            customised quote for your event.
-          </p>
-        </div>
-      </section>
+      <motion.section 
+        className="pt-48 pb-28 md:py-48 bg-gradient-to-b from-primary/10 via-background to-background relative overflow-hidden border-b border-border"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-80px" }}
+        variants={staggerContainer}
+      >
+        <div className="absolute top-0 right-1/4 w-[600px] h-[600px] bg-primary/20 rounded-full blur-[120px] mix-blend-screen pointer-events-none" />
 
-      <section className="py-12 bg-black min-h-[60vh]">
-        <div className="container mx-auto px-6 md:px-12 max-w-5xl">
-          <div className="flex flex-col md:flex-row gap-12">
+        <div className="container mx-auto px-6 md:px-12 text-center relative z-10">
+          <motion.div variants={fadeUp}>
+            <span className="inline-block px-4 py-1.5 mb-6 text-sm font-medium text-primary bg-primary/10 rounded-full">
+              Reserve Your Date
+            </span>
+            <h1 className="text-5xl md:text-7xl font-serif font-bold text-foreground mb-6 tracking-tighter">
+              Make a Booking
+            </h1>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto font-light leading-relaxed">
+              Fill out the details below to check our availability and receive a
+              customised quote for your event.
+            </p>
+          </motion.div>
+        </div>
+      </motion.section>
+
+      <section className="py-28 md:py-36 bg-muted/30 min-h-[60vh]">
+        <div className="container mx-auto px-6 md:px-12 max-w-6xl">
+          <div className="flex flex-col lg:flex-row gap-12 items-start">
             {/* ── Form Column ─────────────────────────────────────────── */}
-            <div className="flex-1">
+            <div className="flex-1 w-full">
               {/* Progress bar */}
               <div className="mb-12">
-                <div className="flex justify-between mb-3">
+                <div className="flex justify-between mb-4 relative z-10">
                   {Array.from({ length: totalSteps }, (_, i) => i + 1).map(
                     (num) => (
                       <div
                         key={num}
-                        className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold border-2 transition-colors ${
+                        className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold border-2 transition-all duration-300 bg-background ${
                           step === num
-                            ? "border-primary text-primary"
+                            ? "border-primary text-primary shadow-[0_0_15px] shadow-primary/20 scale-110"
                             : step > num
-                            ? "bg-primary border-primary text-black"
-                            : "border-white/20 text-white/30"
+                            ? "bg-primary border-primary text-primary-foreground"
+                            : "border-border text-muted-foreground"
                         }`}
                       >
                         {step > num ? (
-                          <CheckCircle2 className="w-4 h-4" />
+                          <CheckCircle2 className="w-5 h-5" />
                         ) : (
                           num
                         )}
@@ -289,34 +303,35 @@ export default function Booking() {
                     )
                   )}
                 </div>
-                <div className="h-1 bg-white/10 w-full rounded-full overflow-hidden">
-                  <div
-                    className="h-full bg-primary transition-all duration-300"
-                    style={{
-                      width: `${((step - 1) / (totalSteps - 1)) * 100}%`,
-                    }}
+                <div className="h-2 bg-border w-full rounded-full overflow-hidden relative -mt-9 z-0 translate-y-4">
+                  <motion.div
+                    className="h-full bg-primary"
+                    initial={{ width: 0 }}
+                    animate={{ width: `${((step - 1) / (totalSteps - 1)) * 100}%` }}
+                    transition={{ duration: 0.5, ease: smoothEase }}
                   />
                 </div>
               </div>
 
               {/* Step content card */}
-              <div className="bg-zinc-950 border border-white/10 p-8 rounded-sm shadow-2xl">
+              <div className="bg-card border border-border p-8 md:p-12 rounded-2xl shadow-sm min-h-[400px] flex flex-col justify-between">
                 <AnimatePresence mode="wait">
                   {/* ── STEP: Booking Type ─────────────────────────── */}
                   {currentKey === "bookingType" && (
                     <motion.div
                       key="bookingType"
-                      initial={{ opacity: 0, x: 20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: -20 }}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -20 }}
+                      transition={{ duration: 0.4, ease: smoothEase }}
                     >
-                      <h2 className="text-2xl font-serif font-bold text-white mb-2">
+                      <h2 className="text-3xl font-serif font-medium text-foreground mb-3">
                         What would you like to book?
                       </h2>
-                      <p className="text-white/40 text-sm mb-8">
+                      <p className="text-muted-foreground mb-10">
                         Choose the type of service you need.
                       </p>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                         {[
                           {
                             id: "Live Band",
@@ -331,24 +346,27 @@ export default function Booking() {
                             key={opt.id}
                             type="button"
                             onClick={() => setBookingType(opt.id)}
-                            className={`p-6 border text-left rounded-sm transition-all ${
+                            className={`p-8 border text-left rounded-xl transition-all duration-300 relative overflow-hidden group ${
                               formData.bookingType === opt.id
-                                ? "border-primary bg-primary/10"
-                                : "border-white/10 text-white/70 hover:border-white/30"
+                                ? "border-primary bg-primary/5 shadow-[0_0_20px] shadow-primary/10"
+                                : "border-border bg-background hover:border-primary/50 hover:bg-card hover:shadow-md"
                             }`}
                           >
-                            <p
-                              className={`font-bold text-lg ${
-                                formData.bookingType === opt.id
-                                  ? "text-primary"
-                                  : "text-white"
-                              }`}
-                            >
-                              {opt.id}
-                            </p>
-                            <p className="text-sm mt-1 text-white/50">
-                              {opt.sub}
-                            </p>
+                            <div className={`absolute inset-0 bg-primary/10 translate-y-full transition-transform duration-300 group-hover:translate-y-0 ${formData.bookingType === opt.id ? "translate-y-0" : ""}`} />
+                            <div className="relative z-10">
+                              <p
+                                className={`font-semibold text-xl mb-2 transition-colors ${
+                                  formData.bookingType === opt.id
+                                    ? "text-primary"
+                                    : "text-foreground"
+                                }`}
+                              >
+                                {opt.id}
+                              </p>
+                              <p className="text-sm text-muted-foreground leading-relaxed">
+                                {opt.sub}
+                              </p>
+                            </div>
                           </button>
                         ))}
                       </div>
@@ -359,17 +377,18 @@ export default function Booking() {
                   {currentKey === "subType" && (
                     <motion.div
                       key="subType"
-                      initial={{ opacity: 0, x: 20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: -20 }}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -20 }}
+                      transition={{ duration: 0.4, ease: smoothEase }}
                     >
-                      <h2 className="text-2xl font-serif font-bold text-white mb-2">
+                      <h2 className="text-3xl font-serif font-medium text-foreground mb-3">
                         Which Live Band service?
                       </h2>
-                      <p className="text-white/40 text-sm mb-8">
+                      <p className="text-muted-foreground mb-10">
                         Select the specific type of booking you need.
                       </p>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                         {[
                           {
                             id: "Live Event",
@@ -384,24 +403,27 @@ export default function Booking() {
                             key={opt.id}
                             type="button"
                             onClick={() => setSubType(opt.id)}
-                            className={`p-6 border text-left rounded-sm transition-all ${
+                            className={`p-8 border text-left rounded-xl transition-all duration-300 relative overflow-hidden group ${
                               formData.subType === opt.id
-                                ? "border-primary bg-primary/10"
-                                : "border-white/10 text-white/70 hover:border-white/30"
+                                ? "border-primary bg-primary/5 shadow-[0_0_20px] shadow-primary/10"
+                                : "border-border bg-background hover:border-primary/50 hover:bg-card hover:shadow-md"
                             }`}
                           >
-                            <p
-                              className={`font-bold text-base ${
-                                formData.subType === opt.id
-                                  ? "text-primary"
-                                  : "text-white"
-                              }`}
-                            >
-                              {opt.id}
-                            </p>
-                            <p className="text-sm mt-1 text-white/50">
-                              {opt.desc}
-                            </p>
+                            <div className={`absolute inset-0 bg-primary/10 translate-y-full transition-transform duration-300 group-hover:translate-y-0 ${formData.subType === opt.id ? "translate-y-0" : ""}`} />
+                            <div className="relative z-10">
+                              <p
+                                className={`font-semibold text-xl mb-2 transition-colors ${
+                                  formData.subType === opt.id
+                                    ? "text-primary"
+                                    : "text-foreground"
+                                }`}
+                              >
+                                {opt.id}
+                              </p>
+                              <p className="text-sm text-muted-foreground leading-relaxed">
+                                {opt.desc}
+                              </p>
+                            </div>
                           </button>
                         ))}
                       </div>
@@ -412,14 +434,15 @@ export default function Booking() {
                   {currentKey === "package" && (
                     <motion.div
                       key="package"
-                      initial={{ opacity: 0, x: 20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: -20 }}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -20 }}
+                      transition={{ duration: 0.4, ease: smoothEase }}
                     >
-                      <h2 className="text-2xl font-serif font-bold text-white mb-2">
+                      <h2 className="text-3xl font-serif font-medium text-foreground mb-3">
                         {packageStepTitle()}
                       </h2>
-                      <p className="text-white/40 text-sm mb-8">
+                      <p className="text-muted-foreground mb-10">
                         Choose the option that best fits your needs.
                       </p>
                       <div className="space-y-4">
@@ -428,45 +451,45 @@ export default function Booking() {
                           <div
                             key={opt.id}
                             onClick={() => update("package", opt.id)}
-                            className={`p-6 border rounded-sm cursor-pointer transition-all flex items-center gap-4 ${
+                            className={`p-6 border rounded-xl cursor-pointer transition-all duration-300 flex items-center gap-6 group hover:shadow-md ${
                               formData.package === opt.id
-                                ? "border-primary bg-primary/10"
-                                : "border-white/10 hover:border-white/30"
+                                ? "border-primary bg-primary/5 shadow-[0_0_20px] shadow-primary/10"
+                                : "border-border bg-background hover:border-primary/50"
                             }`}
                           >
                             <div
-                              className={`w-6 h-6 rounded-full border-2 flex items-center justify-center shrink-0 ${
+                              className={`w-6 h-6 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors ${
                                 formData.package === opt.id
-                                  ? "border-primary"
-                                  : "border-white/30"
+                                  ? "border-primary bg-primary text-primary-foreground"
+                                  : "border-muted-foreground/30 group-hover:border-primary/50"
                               }`}
                             >
                               {formData.package === opt.id && (
-                                <div className="w-3 h-3 bg-primary rounded-full" />
+                                <CheckCircle2 className="w-4 h-4" />
                               )}
                             </div>
                             <div className="flex-1 min-w-0">
-                              <div className="flex justify-between items-start gap-4">
+                              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 mb-2">
                                 <h3
-                                  className={`font-bold text-base ${
+                                  className={`font-semibold text-lg ${
                                     formData.package === opt.id
                                       ? "text-primary"
-                                      : "text-white"
+                                      : "text-foreground"
                                   }`}
                                 >
                                   {opt.label}
                                 </h3>
                                 <span
-                                  className={`text-sm font-bold shrink-0 ${
+                                  className={`text-sm font-bold tracking-wide shrink-0 ${
                                     formData.package === opt.id
                                       ? "text-primary"
-                                      : "text-white/60"
+                                      : "text-foreground/80"
                                   }`}
                                 >
                                   {opt.price}
                                 </span>
                               </div>
-                              <p className="text-sm text-white/50 mt-1">
+                              <p className="text-sm text-muted-foreground leading-relaxed">
                                 {opt.desc}
                               </p>
                             </div>
@@ -476,52 +499,61 @@ export default function Booking() {
                         {/* Other / Custom option */}
                         <div
                           onClick={() => update("package", "Other")}
-                          className={`p-6 border rounded-sm cursor-pointer transition-all ${
+                          className={`p-6 border rounded-xl cursor-pointer transition-all duration-300 group hover:shadow-md ${
                             formData.package === "Other"
-                              ? "border-primary bg-primary/10"
-                              : "border-white/10 hover:border-white/30"
+                              ? "border-primary bg-primary/5 shadow-[0_0_20px] shadow-primary/10"
+                              : "border-border bg-background hover:border-primary/50"
                           }`}
                         >
-                          <div className="flex items-center gap-4">
+                          <div className="flex items-center gap-6">
                             <div
-                              className={`w-6 h-6 rounded-full border-2 flex items-center justify-center shrink-0 ${
+                              className={`w-6 h-6 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors ${
                                 formData.package === "Other"
-                                  ? "border-primary"
-                                  : "border-white/30"
+                                  ? "border-primary bg-primary text-primary-foreground"
+                                  : "border-muted-foreground/30 group-hover:border-primary/50"
                               }`}
                             >
                               {formData.package === "Other" && (
-                                <div className="w-3 h-3 bg-primary rounded-full" />
+                                <CheckCircle2 className="w-4 h-4" />
                               )}
                             </div>
                             <div>
                               <h3
-                                className={`font-bold text-base ${
+                                className={`font-semibold text-lg mb-2 ${
                                   formData.package === "Other"
                                     ? "text-primary"
-                                    : "text-white"
+                                    : "text-foreground"
                                 }`}
                               >
                                 Other / Custom
                               </h3>
-                              <p className="text-sm text-white/50 mt-1">
+                              <p className="text-sm text-muted-foreground leading-relaxed">
                                 Have specific requirements? Describe them below
                                 (optional).
                               </p>
                             </div>
                           </div>
-                          {formData.package === "Other" && (
-                            <textarea
-                              rows={3}
-                              placeholder="e.g. I need 15 LED screens with a custom mounting rig..."
-                              value={formData.customSpec}
-                              onChange={(e) =>
-                                update("customSpec", e.target.value)
-                              }
-                              onClick={(e) => e.stopPropagation()}
-                              className="mt-4 w-full bg-black border border-white/10 p-4 text-white rounded-sm focus:border-primary focus:outline-none resize-none text-sm"
-                            />
-                          )}
+                          <AnimatePresence>
+                            {formData.package === "Other" && (
+                              <motion.div
+                                initial={{ height: 0, opacity: 0 }}
+                                animate={{ height: 'auto', opacity: 1 }}
+                                exit={{ height: 0, opacity: 0 }}
+                                className="overflow-hidden"
+                              >
+                                <textarea
+                                  rows={3}
+                                  placeholder="e.g. I need 15 LED screens with a custom mounting rig..."
+                                  value={formData.customSpec}
+                                  onChange={(e) =>
+                                    update("customSpec", e.target.value)
+                                  }
+                                  onClick={(e) => e.stopPropagation()}
+                                  className="mt-6 w-full bg-background border border-border p-4 text-foreground rounded-lg focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 resize-none text-sm placeholder:text-muted-foreground/50"
+                                />
+                              </motion.div>
+                            )}
+                          </AnimatePresence>
                         </div>
                       </div>
                     </motion.div>
@@ -531,18 +563,19 @@ export default function Booking() {
                   {currentKey === "budgetAmount" && (
                     <motion.div
                       key="budgetAmount"
-                      initial={{ opacity: 0, x: 20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: -20 }}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -20 }}
+                      transition={{ duration: 0.4, ease: smoothEase }}
                     >
-                      <h2 className="text-2xl font-serif font-bold text-white mb-2">
+                      <h2 className="text-3xl font-serif font-medium text-foreground mb-3">
                         What's your budget?
                       </h2>
-                      <p className="text-white/40 text-sm mb-8">
+                      <p className="text-muted-foreground mb-10">
                         The package you selected has a flexible price range ({selectedPackage?.price}). Let us know your target budget.
                       </p>
                       <div>
-                        <label className="block text-sm font-bold text-white/70 mb-2">
+                        <label className="block text-sm font-medium text-foreground mb-3">
                           Enter your budget (GH₵)
                         </label>
                         <input
@@ -550,7 +583,7 @@ export default function Booking() {
                           placeholder="e.g. 5000"
                           value={formData.clientBudget}
                           onChange={(e) => update("clientBudget", e.target.value)}
-                          className="w-full bg-black border border-white/10 p-4 text-white rounded-sm focus:border-primary focus:outline-none"
+                          className="w-full bg-background border border-border p-5 text-foreground rounded-lg focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 placeholder:text-muted-foreground/50 text-lg"
                         />
                       </div>
                     </motion.div>
@@ -560,48 +593,56 @@ export default function Booking() {
                   {currentKey === "eventType" && (
                     <motion.div
                       key="eventType"
-                      initial={{ opacity: 0, x: 20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: -20 }}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -20 }}
+                      transition={{ duration: 0.4, ease: smoothEase }}
                     >
-                      <h2 className="text-2xl font-serif font-bold text-white mb-2">
+                      <h2 className="text-3xl font-serif font-medium text-foreground mb-3">
                         What type of event is this?
                       </h2>
-                      <p className="text-white/40 text-sm mb-8">
+                      <p className="text-muted-foreground mb-10">
                         Select the occasion for your booking.
                       </p>
-                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-4">
+                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-6">
                         {EVENT_SERVICES.map((type) => (
                           <button
                             key={type}
                             type="button"
                             onClick={() => update("eventType", type)}
-                            className={`p-4 border text-left rounded-sm transition-all text-sm ${
+                            className={`p-4 border text-center rounded-xl transition-all duration-300 text-sm font-medium ${
                               formData.eventType === type
-                                ? "border-primary bg-primary/10 text-primary font-bold"
-                                : "border-white/10 text-white/70 hover:border-white/30"
+                                ? "border-primary bg-primary/10 text-primary shadow-[0_0_15px] shadow-primary/20 scale-105"
+                                : "border-border bg-background text-foreground/80 hover:border-primary/50 hover:bg-card hover:text-foreground"
                             }`}
                           >
                             {type}
                           </button>
                         ))}
                       </div>
-                      {formData.eventType === "Other" && (
-                        <div className="mt-2">
-                          <label className="block text-sm font-bold text-white/70 mb-2">
-                            Describe your event
-                          </label>
-                          <input
-                            type="text"
-                            placeholder="e.g. Traditional Naming Ceremony..."
-                            value={formData.customEventType}
-                            onChange={(e) =>
-                              update("customEventType", e.target.value)
-                            }
-                            className="w-full bg-black border border-white/10 p-4 text-white rounded-sm focus:border-primary focus:outline-none"
-                          />
-                        </div>
-                      )}
+                      <AnimatePresence>
+                        {formData.eventType === "Other" && (
+                          <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            className="overflow-hidden"
+                          >
+                            <label className="block text-sm font-medium text-foreground mb-3 mt-4">
+                              Describe your event
+                            </label>
+                            <input
+                              type="text"
+                              placeholder="e.g. Traditional Naming Ceremony..."
+                              value={formData.customEventType}
+                              onChange={(e) =>
+                                update("customEventType", e.target.value)
+                              }
+                              className="w-full bg-background border border-border p-4 text-foreground rounded-lg focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 placeholder:text-muted-foreground/50"
+                            />
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
                     </motion.div>
                   )}
 
@@ -609,32 +650,33 @@ export default function Booking() {
                   {currentKey === "when" && (
                     <motion.div
                       key="when"
-                      initial={{ opacity: 0, x: 20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: -20 }}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -20 }}
+                      transition={{ duration: 0.4, ease: smoothEase }}
                     >
-                      <h2 className="text-2xl font-serif font-bold text-white mb-2">
+                      <h2 className="text-3xl font-serif font-medium text-foreground mb-3">
                         When is the event?
                       </h2>
-                      <p className="text-white/40 text-sm mb-8">
+                      <p className="text-muted-foreground mb-10">
                         Choose the date and estimated start time.
                       </p>
                       <div className="space-y-6">
                         <div>
-                          <label className="block text-sm font-bold text-white/70 mb-2">
+                          <label className="block text-sm font-medium text-foreground mb-3">
                             Date
                           </label>
                           <input
                             type="date"
                             value={formData.date}
                             onChange={(e) => update("date", e.target.value)}
-                            className="w-full bg-black border border-white/10 p-4 text-white rounded-sm focus:border-primary focus:outline-none"
+                            className="w-full bg-background border border-border p-4 text-foreground rounded-lg focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                           />
                         </div>
                         <div>
-                          <label className="block text-sm font-bold text-white/70 mb-2">
+                          <label className="block text-sm font-medium text-foreground mb-3">
                             Estimated Start Time{" "}
-                            <span className="text-white/30 font-normal">
+                            <span className="text-muted-foreground/70 font-normal">
                               (optional)
                             </span>
                           </label>
@@ -642,7 +684,7 @@ export default function Booking() {
                             type="time"
                             value={formData.time}
                             onChange={(e) => update("time", e.target.value)}
-                            className="w-full bg-black border border-white/10 p-4 text-white rounded-sm focus:border-primary focus:outline-none"
+                            className="w-full bg-background border border-border p-4 text-foreground rounded-lg focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                           />
                         </div>
                       </div>
@@ -653,19 +695,20 @@ export default function Booking() {
                   {currentKey === "where" && (
                     <motion.div
                       key="where"
-                      initial={{ opacity: 0, x: 20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: -20 }}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -20 }}
+                      transition={{ duration: 0.4, ease: smoothEase }}
                     >
-                      <h2 className="text-2xl font-serif font-bold text-white mb-2">
+                      <h2 className="text-3xl font-serif font-medium text-foreground mb-3">
                         Where is it happening?
                       </h2>
-                      <p className="text-white/40 text-sm mb-8">
+                      <p className="text-muted-foreground mb-10">
                         Tell us the venue and expected attendance.
                       </p>
                       <div className="space-y-6">
                         <div>
-                          <label className="block text-sm font-bold text-white/70 mb-2">
+                          <label className="block text-sm font-medium text-foreground mb-3">
                             Venue Name & City
                           </label>
                           <input
@@ -673,20 +716,20 @@ export default function Booking() {
                             placeholder="e.g. Kempinski Hotel, Accra"
                             value={formData.venue}
                             onChange={(e) => update("venue", e.target.value)}
-                            className="w-full bg-black border border-white/10 p-4 text-white rounded-sm focus:border-primary focus:outline-none"
+                            className="w-full bg-background border border-border p-4 text-foreground rounded-lg focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 placeholder:text-muted-foreground/50"
                           />
                         </div>
                         <div>
-                          <label className="block text-sm font-bold text-white/70 mb-2">
+                          <label className="block text-sm font-medium text-foreground mb-3">
                             Estimated Guest Count{" "}
-                            <span className="text-white/30 font-normal">
+                            <span className="text-muted-foreground/70 font-normal">
                               (optional)
                             </span>
                           </label>
                           <select
                             value={formData.guests}
                             onChange={(e) => update("guests", e.target.value)}
-                            className="w-full bg-black border border-white/10 p-4 text-white rounded-sm focus:border-primary focus:outline-none"
+                            className="w-full bg-background border border-border p-4 text-foreground rounded-lg focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 appearance-none"
                           >
                             <option value="">Select range...</option>
                             <option value="Under 50">Under 50</option>
@@ -704,20 +747,21 @@ export default function Booking() {
                   {currentKey === "details" && (
                     <motion.div
                       key="details"
-                      initial={{ opacity: 0, x: 20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: -20 }}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -20 }}
+                      transition={{ duration: 0.4, ease: smoothEase }}
                     >
-                      <h2 className="text-2xl font-serif font-bold text-white mb-2">
+                      <h2 className="text-3xl font-serif font-medium text-foreground mb-3">
                         Your Details
                       </h2>
-                      <p className="text-white/40 text-sm mb-8">
+                      <p className="text-muted-foreground mb-10">
                         We'll use this to send you a personalised proposal.
                       </p>
-                      <form onSubmit={handleSubmit} className="space-y-6">
+                      <div className="space-y-6">
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                           <div>
-                            <label className="block text-sm font-bold text-white/70 mb-2">
+                            <label className="block text-sm font-medium text-foreground mb-3">
                               Full Name
                             </label>
                             <input
@@ -726,11 +770,11 @@ export default function Booking() {
                               placeholder="e.g. Kwame Mensah"
                               value={formData.name}
                               onChange={(e) => update("name", e.target.value)}
-                              className="w-full bg-black border border-white/10 p-4 text-white rounded-sm focus:border-primary focus:outline-none"
+                              className="w-full bg-background border border-border p-4 text-foreground rounded-lg focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 placeholder:text-muted-foreground/50"
                             />
                           </div>
                           <div>
-                            <label className="block text-sm font-bold text-white/70 mb-2">
+                            <label className="block text-sm font-medium text-foreground mb-3">
                               Phone Number
                             </label>
                             <input
@@ -739,12 +783,12 @@ export default function Booking() {
                               placeholder="e.g. +233 24 123 4567"
                               value={formData.phone}
                               onChange={(e) => update("phone", e.target.value)}
-                              className="w-full bg-black border border-white/10 p-4 text-white rounded-sm focus:border-primary focus:outline-none"
+                              className="w-full bg-background border border-border p-4 text-foreground rounded-lg focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 placeholder:text-muted-foreground/50"
                             />
                           </div>
                         </div>
                         <div>
-                          <label className="block text-sm font-bold text-white/70 mb-2">
+                          <label className="block text-sm font-medium text-foreground mb-3">
                             Email Address
                           </label>
                           <input
@@ -753,13 +797,13 @@ export default function Booking() {
                             placeholder="e.g. kwame@example.com"
                             value={formData.email}
                             onChange={(e) => update("email", e.target.value)}
-                            className="w-full bg-black border border-white/10 p-4 text-white rounded-sm focus:border-primary focus:outline-none"
+                            className="w-full bg-background border border-border p-4 text-foreground rounded-lg focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 placeholder:text-muted-foreground/50"
                           />
                         </div>
                         <div>
-                          <label className="block text-sm font-bold text-white/70 mb-2">
+                          <label className="block text-sm font-medium text-foreground mb-3">
                             Special Requests / Questions{" "}
-                            <span className="text-white/30 font-normal">
+                            <span className="text-muted-foreground/70 font-normal">
                               (optional)
                             </span>
                           </label>
@@ -770,38 +814,38 @@ export default function Booking() {
                             onChange={(e) =>
                               update("requests", e.target.value)
                             }
-                            className="w-full bg-black border border-white/10 p-4 text-white rounded-sm focus:border-primary focus:outline-none resize-none"
+                            className="w-full bg-background border border-border p-4 text-foreground rounded-lg focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 resize-none placeholder:text-muted-foreground/50"
                           />
                         </div>
-                        {/* Honeypot */}
-                        <div className="hidden">
-                          <input type="text" name="website" />
-                        </div>
-                      </form>
+                      </div>
                     </motion.div>
                   )}
                 </AnimatePresence>
 
                 {/* Navigation */}
-                <div className="flex justify-between mt-12 pt-6 border-t border-white/10">
+                <div className="flex justify-between mt-12 pt-8 border-t border-border">
                   <Button
-                    variant="ghost"
+                    variant="outline"
                     onClick={prevStep}
                     disabled={step === 1}
-                    className="text-white/60 hover:text-white"
+                    className="rounded-full px-6 bg-transparent"
                   >
                     <ArrowLeft className="w-4 h-4 mr-2" /> Back
                   </Button>
 
                   {step < totalSteps ? (
-                    <Button onClick={nextStep} disabled={!isStepValid()}>
+                    <Button 
+                      onClick={nextStep} 
+                      disabled={!isStepValid()}
+                      className="rounded-full px-8"
+                    >
                       Next Step <ArrowRight className="w-4 h-4 ml-2" />
                     </Button>
                   ) : (
                     <Button
                       onClick={handleSubmit}
                       disabled={!isStepValid() || isSubmitting}
-                      className="bg-primary text-black font-bold"
+                      className="rounded-full px-8 bg-primary text-primary-foreground font-semibold hover-lift"
                     >
                       {isSubmitting ? "Submitting..." : "Submit Request"}
                     </Button>
@@ -811,42 +855,42 @@ export default function Booking() {
             </div>
 
             {/* ── Sidebar Summary ──────────────────────────────────────── */}
-            <div className="w-full md:w-80 shrink-0">
-              <div className="sticky top-32 bg-zinc-950 border border-white/10 p-6 rounded-sm">
-                <h3 className="font-serif font-bold text-xl text-white mb-6 pb-4 border-b border-white/10">
+            <div className="w-full lg:w-96 shrink-0">
+              <div className="sticky top-32 bg-card border border-border p-8 rounded-2xl glass-card shadow-sm">
+                <h3 className="font-serif font-medium text-2xl text-foreground mb-6 pb-6 border-b border-border">
                   Your Booking
                 </h3>
-                <div className="space-y-4 text-sm">
+                <div className="space-y-6 text-sm">
                   {formData.bookingType && (
-                    <div>
-                      <div className="text-white/40 uppercase tracking-widest text-xs mb-1">
+                    <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
+                      <div className="text-muted-foreground uppercase tracking-widest text-xs mb-2 font-medium">
                         Booking Type
                       </div>
-                      <div className="text-white font-medium">
+                      <div className="text-foreground font-semibold text-base">
                         {formData.bookingType}
                       </div>
                     </div>
                   )}
 
                   {formData.subType && (
-                    <div>
-                      <div className="text-white/40 uppercase tracking-widest text-xs mb-1">
+                    <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
+                      <div className="text-muted-foreground uppercase tracking-widest text-xs mb-2 font-medium">
                         Service
                       </div>
-                      <div className="text-white font-medium">
+                      <div className="text-foreground font-semibold text-base">
                         {formData.subType}
                       </div>
                     </div>
                   )}
 
                   {formData.package && (
-                    <div>
-                      <div className="text-white/40 uppercase tracking-widest text-xs mb-1">
+                    <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
+                      <div className="text-muted-foreground uppercase tracking-widest text-xs mb-2 font-medium">
                         {formData.subType === "Live Event"
                           ? "Coverage"
                           : "Package"}
                       </div>
-                      <div className="text-primary font-bold">
+                      <div className="text-primary font-semibold text-base">
                         {formData.package === "Other"
                           ? "Custom"
                           : formData.package}
@@ -855,22 +899,22 @@ export default function Booking() {
                   )}
 
                   {formData.clientBudget && (
-                    <div>
-                      <div className="text-white/40 uppercase tracking-widest text-xs mb-1">
+                    <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
+                      <div className="text-muted-foreground uppercase tracking-widest text-xs mb-2 font-medium">
                         Budget
                       </div>
-                      <div className="text-white font-medium">
+                      <div className="text-foreground font-semibold text-base">
                         GH₵{formData.clientBudget}
                       </div>
                     </div>
                   )}
 
                   {formData.eventType && (
-                    <div>
-                      <div className="text-white/40 uppercase tracking-widest text-xs mb-1">
+                    <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
+                      <div className="text-muted-foreground uppercase tracking-widest text-xs mb-2 font-medium">
                         Event
                       </div>
-                      <div className="text-white font-medium">
+                      <div className="text-foreground font-semibold text-base">
                         {formData.eventType === "Other"
                           ? formData.customEventType || "Other"
                           : formData.eventType}
@@ -879,25 +923,31 @@ export default function Booking() {
                   )}
 
                   {(formData.date || formData.time) && (
-                    <div>
-                      <div className="text-white/40 uppercase tracking-widest text-xs mb-1">
+                    <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
+                      <div className="text-muted-foreground uppercase tracking-widest text-xs mb-2 font-medium">
                         When
                       </div>
-                      <div className="text-white font-medium">
+                      <div className="text-foreground font-semibold text-base">
                         {formData.date}
-                        {formData.time && ` at ${formData.time}`}
+                        {formData.time && <span className="text-muted-foreground font-normal ml-1">at {formData.time}</span>}
                       </div>
                     </div>
                   )}
 
                   {formData.venue && (
-                    <div>
-                      <div className="text-white/40 uppercase tracking-widest text-xs mb-1">
+                    <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
+                      <div className="text-muted-foreground uppercase tracking-widest text-xs mb-2 font-medium">
                         Where
                       </div>
-                      <div className="text-white font-medium">
+                      <div className="text-foreground font-semibold text-base leading-relaxed">
                         {formData.venue}
                       </div>
+                    </div>
+                  )}
+                  
+                  {!formData.bookingType && (
+                    <div className="text-muted-foreground/50 text-center py-8 border border-dashed border-border rounded-xl">
+                      Make a selection to build your quote
                     </div>
                   )}
                 </div>

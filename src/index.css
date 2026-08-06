@@ -67,7 +67,7 @@
   --radius-xl: calc(var(--radius) + 4px);
 }
 
-/* LIGHT MODE */
+/* ─── LIGHT MODE ─────────────────────────────────────────────────────────── */
 :root {
   --button-outline: rgba(0, 0, 0, 0.1);
   --badge-outline: rgba(0, 0, 0, 0.05);
@@ -133,6 +133,7 @@
   --spacing: 0.25rem;
 }
 
+/* ─── DARK MODE ──────────────────────────────────────────────────────────── */
 .dark {
   --button-outline: rgba(255, 255, 255, 0.1);
   --badge-outline: rgba(255, 255, 255, 0.05);
@@ -183,14 +184,18 @@
   --chart-5: 20 60% 60%;
 }
 
-/* Smooth theme transitions */
-*, *::before, *::after {
-  transition-property: background-color, border-color, color, fill, stroke;
-  transition-duration: 250ms;
-  transition-timing-function: ease;
+/* ─── Smooth global theme transition ─────────────────────────────────────── */
+html {
+  scroll-behavior: smooth;
 }
 
-/* Disable transitions on motion-sensitive elements */
+*, *::before, *::after {
+  transition-property: background-color, border-color, color, fill, stroke, box-shadow;
+  transition-duration: 300ms;
+  transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Framer Motion handles its own transitions — don't interfere */
 [data-framer-motion], [class*="animate-"] {
   transition: none !important;
 }
@@ -234,6 +239,9 @@ html:not(.dark) .border-white\/10 {
 }
 html:not(.dark) .border-white\/5 {
   border-color: hsl(var(--border) / 0.5) !important;
+}
+html:not(.dark) .border-white\/20 {
+  border-color: hsl(var(--border)) !important;
 }
 html:not(.dark) .bg-white\/5 {
   background-color: rgba(0, 0, 0, 0.04) !important;
@@ -304,6 +312,62 @@ html:not(.dark) .bg-black\/80 {
   background-color: hsl(var(--foreground) / 0.06) !important;
 }
 
+/* ─── Glassmorphism utility ──────────────────────────────────────────────── */
+.glass-card {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+html:not(.dark) .glass-card {
+  background: rgba(255, 255, 255, 0.6) !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+}
+
+/* ─── Subtle glow for primary accent elements ────────────────────────────── */
+.glow-primary {
+  box-shadow: 0 0 20px rgba(212, 50, 12, 0.15), 0 0 60px rgba(212, 50, 12, 0.05);
+}
+
+.dark .glow-primary {
+  box-shadow: 0 0 30px rgba(212, 50, 12, 0.2), 0 0 80px rgba(212, 50, 12, 0.08);
+}
+
+/* ─── Premium hover lift effect ──────────────────────────────────────────── */
+.hover-lift {
+  transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              box-shadow 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+}
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+.dark .hover-lift:hover {
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+}
+
+/* ─── WhatsApp pulse animation ────────────────────────────────────────────── */
+@keyframes wa-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.4); }
+  50% { box-shadow: 0 0 0 12px rgba(37, 211, 102, 0); }
+}
+.wa-pulse {
+  animation: wa-pulse 2.5s ease-in-out infinite;
+}
+
+/* ─── Grayscale → color on hover ──────────────────────────────────────────── */
+.grayscale-hover {
+  filter: grayscale(100%);
+  opacity: 0.6;
+  transition: filter 0.4s ease, opacity 0.4s ease !important;
+}
+.grayscale-hover:hover {
+  filter: grayscale(0%);
+  opacity: 1;
+}
+
 @layer base {
   * {
     @apply border-border;
@@ -311,10 +375,22 @@ html:not(.dark) .bg-black\/80 {
 
   body {
     @apply font-sans antialiased bg-background text-foreground;
+    overflow-x: hidden;
   }
   
   h1, h2, h3, h4, h5, h6 {
     @apply font-serif tracking-tight;
+  }
+
+  button,
+  a,
+  [role="button"],
+  input[type="submit"],
+  input[type="reset"],
+  input[type="button"],
+  select,
+  summary {
+    cursor: pointer;
   }
 }
 

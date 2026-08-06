@@ -2,9 +2,10 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
-import { Play, Download } from "lucide-react";
+import { Play, Download, Search } from "lucide-react";
 import { galleryItems } from "@/data/content";
 import { cn } from "@/lib/utils";
+import { fadeUp, fadeIn, scaleIn, staggerContainer } from '@/hooks/useScrollReveal';
 
 export default function Gallery() {
   const [filter, setFilter] = useState("All");
@@ -21,77 +22,104 @@ export default function Gallery() {
 
   return (
     <Layout>
-      <section className="pt-40 pb-12 bg-black relative">
-        <div className="container mx-auto px-6 md:px-12 text-center">
-          <h1 className="text-5xl md:text-7xl font-serif font-bold text-white mb-6 tracking-tighter">
-            Gallery
-          </h1>
-          <p className="text-xl text-white/60 max-w-2xl mx-auto font-light mb-12">
-            See and feel the energy of Powers of Grace.
-          </p>
+      <section className="relative h-[60vh] flex items-center justify-center overflow-hidden">
+        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1459749411175-04bf5292ceea?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center bg-no-repeat" />
+        <div className="absolute inset-0 bg-black/60 bg-gradient-to-t from-background to-transparent" />
+        
+        <div className="container mx-auto px-6 md:px-12 relative z-10 text-center mt-20">
+          <motion.div
+            initial="hidden"
+            animate="visible"
+            variants={staggerContainer}
+          >
+            <motion.div variants={fadeUp} className="text-primary font-bold tracking-widest uppercase text-sm mb-4">
+              Home / Gallery
+            </motion.div>
+            <motion.h1 variants={fadeUp} className="text-5xl md:text-7xl font-serif font-bold text-white mb-6 tracking-tighter">
+              Gallery
+            </motion.h1>
+            <motion.p variants={fadeUp} className="text-xl md:text-2xl text-white/80 max-w-2xl mx-auto font-light">
+              See and feel the energy of Powers of Grace.
+            </motion.p>
+          </motion.div>
+        </div>
+      </section>
 
-          <div className="flex flex-col md:flex-row items-center justify-center gap-6 mb-8">
-            <div className="flex gap-2 p-1 bg-white/5 rounded-sm overflow-x-auto w-full md:w-auto max-w-full">
+      <section className="py-12 bg-background border-b border-border">
+        <div className="container mx-auto px-6 md:px-12">
+          <motion.div 
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-80px" }}
+            variants={fadeUp}
+            className="flex flex-col lg:flex-row items-center justify-between gap-6"
+          >
+            <div className="flex gap-2 p-1 bg-muted rounded-full overflow-x-auto w-full lg:w-auto max-w-full">
               {types.map(t => (
                 <button
                   key={t}
                   onClick={() => setFilter(t)}
                   className={cn(
-                    "px-6 py-2 rounded-sm text-sm font-bold uppercase tracking-wider transition-colors whitespace-nowrap",
-                    filter === t ? "bg-primary text-black" : "text-white/60 hover:text-white"
+                    "px-6 py-2.5 rounded-full text-sm font-bold uppercase tracking-wider transition-colors whitespace-nowrap",
+                    filter === t ? "bg-primary text-black shadow-sm" : "text-muted-foreground hover:text-foreground"
                   )}
                 >
                   {t}
                 </button>
               ))}
             </div>
-            <div className="flex gap-2 p-1 bg-white/5 rounded-sm overflow-x-auto w-full md:w-auto max-w-full">
+            <div className="flex gap-2 p-1 bg-muted rounded-full overflow-x-auto w-full lg:w-auto max-w-full">
               {moods.map(m => (
                 <button
                   key={m}
                   onClick={() => setMood(m)}
                   className={cn(
-                    "px-4 py-2 rounded-sm text-sm font-bold uppercase tracking-wider transition-colors whitespace-nowrap",
-                    mood === m ? "bg-primary/20 text-primary" : "text-white/60 hover:text-white"
+                    "px-5 py-2.5 rounded-full text-sm font-bold uppercase tracking-wider transition-colors whitespace-nowrap",
+                    mood === m ? "bg-primary/20 text-primary shadow-sm" : "text-muted-foreground hover:text-foreground"
                   )}
                 >
                   {m}
                 </button>
               ))}
             </div>
-          </div>
+          </motion.div>
         </div>
       </section>
 
-      <section className="py-12 bg-black min-h-[50vh]">
+      <section className="py-20 bg-background min-h-[50vh]">
         <div className="container mx-auto px-6 md:px-12">
-          <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <AnimatePresence>
+          <motion.div 
+            layout 
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-80px" }}
+            variants={staggerContainer}
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+          >
+            <AnimatePresence mode="popLayout">
               {filteredItems.map(item => (
                 <motion.div
                   key={item.id}
                   layout
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
+                  variants={scaleIn}
                   exit={{ opacity: 0, scale: 0.9 }}
-                  transition={{ duration: 0.3 }}
-                  className={cn(
-                    "relative group overflow-hidden rounded-sm cursor-pointer",
-                    item.type === "Video" ? "aspect-video md:col-span-2 lg:col-span-2" : "aspect-square"
-                  )}
+                  className="relative group overflow-hidden rounded-xl cursor-pointer hover-lift shadow-sm bg-card aspect-[4/3]"
                 >
-                  <div className={`absolute inset-0 ${item.image} transition-transform duration-700 group-hover:scale-105`} />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-100 transition-opacity" />
+                  <div className={`absolute inset-0 ${item.image} bg-cover bg-center transition-transform duration-700 group-hover:scale-110`} />
+                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-100 transition-opacity duration-300" />
                   
-                  {item.type === "Video" && (
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="w-16 h-16 bg-primary/90 rounded-full flex items-center justify-center pl-1 group-hover:scale-110 transition-transform shadow-lg shadow-black/50">
-                        <Play className="w-6 h-6 text-black" />
-                      </div>
+                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 transform scale-90 group-hover:scale-100">
+                    <div className="w-16 h-16 bg-primary/90 rounded-full flex items-center justify-center text-black shadow-lg shadow-black/50">
+                      {item.type === "Video" ? (
+                        <Play className="w-6 h-6 ml-1" />
+                      ) : (
+                        <Search className="w-6 h-6" />
+                      )}
                     </div>
-                  )}
+                  </div>
 
-                  <div className="absolute bottom-0 left-0 p-6 translate-y-4 group-hover:translate-y-0 transition-transform">
+                  <div className="absolute bottom-0 left-0 p-6 translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
                     <div className="text-primary text-xs font-bold uppercase tracking-widest mb-1">{item.mood}</div>
                     <h3 className="text-xl font-serif font-bold text-white">{item.title}</h3>
                   </div>
@@ -101,24 +129,34 @@ export default function Gallery() {
           </motion.div>
           
           {filteredItems.length === 0 && (
-            <div className="text-center py-24 text-white/50">
+            <motion.div 
+              initial="hidden" animate="visible" variants={fadeIn}
+              className="text-center py-32 text-muted-foreground"
+            >
               No media found for this combination.
-            </div>
+            </motion.div>
           )}
         </div>
       </section>
 
-      <section className="py-24 bg-zinc-950 border-t border-white/5 text-center">
+      <motion.section 
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-80px" }}
+        variants={fadeUp}
+        className="py-28 md:py-36 bg-muted/30 border-t border-border text-center"
+      >
         <div className="container mx-auto px-6">
-          <h2 className="text-3xl font-serif font-bold text-white mb-6">Press & Media Kit</h2>
-          <p className="text-white/60 mb-8 max-w-xl mx-auto">
+          <div className="text-primary font-bold tracking-widest uppercase text-sm mb-4">Resources</div>
+          <h2 className="text-4xl md:text-5xl font-serif font-bold text-foreground mb-6">Press & Media Kit</h2>
+          <p className="text-muted-foreground mb-10 max-w-xl mx-auto text-lg leading-relaxed">
             Download our Electronic Press Kit (EPK) containing high-res photos, tech riders, stage plots, and official bios for promoters and planners.
           </p>
-          <Button variant="outline" className="border-primary text-primary hover:bg-primary hover:text-black">
-            <Download className="w-4 h-4 mr-2" /> Download EPK (PDF)
+          <Button variant="outline" size="lg" className="border-primary text-primary hover:bg-primary hover:text-black h-14 px-8 text-base">
+            <Download className="w-5 h-5 mr-3" /> Download EPK (PDF)
           </Button>
         </div>
-      </section>
+      </motion.section>
     </Layout>
   );
 }

@@ -1,10 +1,11 @@
-import { motion, useMotionValue, useTransform, animate } from "framer-motion";
+import { motion, useMotionValue, useTransform, animate, useScroll, useInView } from "framer-motion";
 import { Link } from "wouter";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Music, Star, Calendar, MapPin, Users, Video } from "lucide-react";
 import { services, testimonials, upcomingEvents } from "@/data/content";
+import { useScrollReveal, fadeUp, fadeIn, fadeLeft, fadeRight, scaleIn, staggerContainer, staggerContainerFast, smoothEase } from '@/hooks/useScrollReveal';
 
 function useCountdown(targetDate: Date) {
   const calculate = () => {
@@ -32,16 +33,43 @@ function useTypewriter(text: string) {
   useEffect(() => {
     const controls = animate(count, text.length, {
       type: "tween",
-      duration: text.length * 0.12, // 120ms per character
+      duration: text.length * 0.12,
       ease: "linear",
       repeat: Infinity,
       repeatType: "reverse",
-      repeatDelay: 3, // Pause for 3 seconds before deleting
+      repeatDelay: 3,
     });
     return controls.stop;
   }, [count, text.length]);
 
   return displayedText;
+}
+
+function AnimatedNumber({ value }: { value: string }) {
+  const numValue = parseInt(value.replace(/[^0-9]/g, ''));
+  const suffix = value.replace(/[0-9]/g, '');
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-50px" });
+  const motionValue = useMotionValue(0);
+  const rounded = useTransform(motionValue, (latest) => Math.round(latest));
+  const [displayValue, setDisplayValue] = useState(0);
+
+  useEffect(() => {
+    const unsubscribe = rounded.on("change", (latest) => setDisplayValue(latest));
+    return unsubscribe;
+  }, [rounded]);
+
+  useEffect(() => {
+    if (isInView) {
+      animate(motionValue, numValue, { duration: 2, ease: smoothEase });
+    }
+  }, [isInView, motionValue, numValue]);
+
+  return (
+    <span ref={ref}>
+      {displayValue}{suffix}
+    </span>
+  );
 }
 
 const SHOW_DATE = new Date("2026-12-20T19:00:00+00:00");
@@ -50,6 +78,9 @@ export default function Home() {
   const countdown = useCountdown(SHOW_DATE);
   const typedText = useTypewriter("POWERS OF GRACE");
 
+  const { scrollY } = useScroll();
+  const heroY = useTransform(scrollY, [0, 1000], ["0%", "50%"]);
+
   return (
     <Layout>
       {/* Hero Section */}
@@ -57,11 +88,12 @@ export default function Home() {
         <div className="absolute inset-0 z-0">
           {/* Dark overlay for text legibility */}
           <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/60 to-black z-10" />
-          {/* Hero background image */}
-          <img
+          {/* Hero background image with Parallax */}
+          <motion.img
             src="/hero-bg.jpg"
             alt="Powers of Grace Live Stage"
             className="absolute inset-0 w-full h-full object-cover object-center opacity-70"
+            style={{ y: heroY }}
           />
           {/* Subtle noise/grain texture overlay */}
           <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPjxyZWN0IHdpZHRoPSI0IiBoZWlnaHQ9IjQiIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSIvPjwvc3ZnPg==')] opacity-20 z-10" />
@@ -71,7 +103,7 @@ export default function Home() {
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.2 }}
+            transition={{ duration: 1, delay: 0.2, ease: smoothEase }}
           >
             <span className="text-primary tracking-[0.3em] uppercase text-sm md:text-base font-bold mb-6 block">
               The Ultimate Live Experience
@@ -87,7 +119,7 @@ export default function Home() {
             className="text-xl md:text-2xl text-white/80 max-w-2xl mx-auto mb-12 font-light"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 0.8 }}
+            transition={{ duration: 1, delay: 0.8, ease: smoothEase }}
           >
             Live music that turns moments into memories.
           </motion.p>
@@ -96,7 +128,7 @@ export default function Home() {
             className="flex flex-col sm:flex-row items-center justify-center gap-6"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1 }}
+            transition={{ duration: 0.8, delay: 1, ease: smoothEase }}
           >
             <Link href="/booking">
               <Button size="lg" className="text-lg px-8 h-16 w-full sm:w-auto hover:bg-white hover:text-black">
@@ -116,14 +148,20 @@ export default function Home() {
         <motion.div 
           className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20"
           animate={{ y: [0, 10, 0] }}
-          transition={{ repeat: Infinity, duration: 2 }}
+          transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
         >
           <div className="w-px h-16 bg-gradient-to-b from-primary to-transparent" />
         </motion.div>
       </section>
 
       {/* Stats Bar */}
-      <section className="border-y border-white/10 bg-zinc-950">
+      <motion.section 
+        className="border-y border-white/10 bg-zinc-950"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-80px" }}
+        variants={staggerContainer}
+      >
         <div className="container mx-auto px-6 py-12">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 divide-x divide-white/10">
             {[
@@ -132,19 +170,27 @@ export default function Home() {
               { label: "Cities Performed", value: "30+" },
               { label: "Client Satisfaction", value: "98%" }
             ].map((stat, i) => (
-              <div key={i} className="text-center px-4">
-                <div className="text-3xl md:text-5xl font-serif font-bold text-primary mb-2">{stat.value}</div>
+              <motion.div key={i} className="text-center px-4" variants={fadeUp}>
+                <div className="text-3xl md:text-5xl font-serif font-bold text-primary mb-2">
+                  <AnimatedNumber value={stat.value} />
+                </div>
                 <div className="text-xs md:text-sm uppercase tracking-widest text-white/50">{stat.label}</div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Services Section */}
-      <section className="py-24 bg-black">
+      <motion.section 
+        className="py-24 bg-black"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-80px" }}
+        variants={staggerContainer}
+      >
         <div className="container mx-auto px-6 md:px-12">
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
+          <motion.div variants={fadeUp} className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
             <div>
               <h2 className="text-4xl md:text-6xl font-serif font-bold text-white mb-4">What We Do</h2>
               <p className="text-white/60 text-lg max-w-xl">
@@ -156,17 +202,14 @@ export default function Home() {
                 View All Services <ArrowRight className="ml-2 w-4 h-4" />
               </Button>
             </Link>
-          </div>
+          </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {services.map((service, i) => (
               <motion.div 
                 key={service.id}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-                className="group relative h-96 overflow-hidden rounded-sm"
+                variants={fadeUp}
+                className="group relative h-96 overflow-hidden rounded-sm glass-card hover-lift"
               >
                 <div className={`absolute inset-0 ${service.image} transition-transform duration-700 group-hover:scale-105`} />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
@@ -186,15 +229,21 @@ export default function Home() {
             ))}
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Featured Video */}
-      <section className="py-24 bg-zinc-950 relative">
+      <motion.section 
+        className="py-24 bg-zinc-950 relative"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-80px" }}
+        variants={staggerContainer}
+      >
         <div className="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-primary/5 to-transparent pointer-events-none" />
         <div className="container mx-auto px-6 md:px-12 text-center">
-          <h2 className="text-3xl md:text-5xl font-serif font-bold text-white mb-12">Experience The Energy</h2>
+          <motion.h2 variants={fadeUp} className="text-3xl md:text-5xl font-serif font-bold text-white mb-12">Experience The Energy</motion.h2>
           
-          <div className="aspect-video max-w-5xl mx-auto rounded-sm overflow-hidden relative group cursor-pointer bg-zinc-900 border border-white/10 shadow-2xl">
+          <motion.div variants={fadeUp} className="aspect-video max-w-5xl mx-auto rounded-sm overflow-hidden relative group cursor-pointer bg-zinc-900 border border-white/10 shadow-2xl hover-lift">
             <video 
               autoPlay 
               muted 
@@ -213,22 +262,28 @@ export default function Home() {
               <div className="text-white font-bold text-xl drop-shadow-md">Powers of Grace - Live at Accra International Conference Centre</div>
               <div className="text-white/80 text-sm drop-shadow-md">Highlight Reel 2025</div>
             </div>
-          </div>
+          </motion.div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Upcoming Show Countdown */}
-      <section className="py-24 bg-primary text-black relative overflow-hidden">
+      <motion.section 
+        className="py-24 bg-primary text-black relative overflow-hidden"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-80px" }}
+        variants={staggerContainer}
+      >
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPjxyZWN0IHdpZHRoPSI0IiBoZWlnaHQ9IjQiIGZpbGw9IiMwMDAiIGZpbGwtb3BhY2l0eT0iMC4xIi8+PC9zdmc+')] opacity-50" />
         
         <div className="container mx-auto px-6 md:px-12 relative z-10 text-center">
-          <div className="inline-flex items-center justify-center gap-2 border border-black/20 px-4 py-2 rounded-full mb-8 font-bold tracking-widest uppercase text-sm">
+          <motion.div variants={fadeUp} className="inline-flex items-center justify-center gap-2 border border-black/20 px-4 py-2 rounded-full mb-8 font-bold tracking-widest uppercase text-sm glass-card hover-lift">
             <Calendar className="w-4 h-4" /> Next Public Show
-          </div>
-          <h2 className="text-4xl md:text-7xl font-serif font-bold mb-6">A Night of Grace</h2>
-          <p className="text-xl md:text-2xl mb-12 font-medium opacity-80">December 20, 2026 • Accra Sports Stadium</p>
+          </motion.div>
+          <motion.h2 variants={fadeUp} className="text-4xl md:text-7xl font-serif font-bold mb-6">A Night of Grace</motion.h2>
+          <motion.p variants={fadeUp} className="text-xl md:text-2xl mb-12 font-medium opacity-80">December 20, 2026 • Accra Sports Stadium</motion.p>
           
-          <div className="flex justify-center gap-4 md:gap-8 mb-12">
+          <motion.div variants={staggerContainer} className="flex justify-center gap-4 md:gap-8 mb-12">
             {([
               { label: "Days", value: String(countdown.days).padStart(2, "0") },
               { label: "Hours", value: String(countdown.hours).padStart(2, "0") },
@@ -237,35 +292,47 @@ export default function Home() {
             ] as { label: string; value: string }[]).map((unit, i) => (
               <div key={i} className="flex flex-col items-center">
                 <motion.div
-                  key={unit.value}
-                  initial={{ opacity: 0.4, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.2 }}
-                  className="w-16 h-16 md:w-24 md:h-24 bg-black text-primary text-2xl md:text-4xl font-bold font-mono flex items-center justify-center rounded-sm shadow-xl"
+                  variants={scaleIn}
+                  className="w-16 h-16 md:w-24 md:h-24 bg-black text-primary text-2xl md:text-4xl font-bold font-mono flex items-center justify-center rounded-sm shadow-xl hover-lift"
                 >
-                  {unit.value}
+                  <motion.span
+                    key={unit.value}
+                    initial={{ opacity: 0.4, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    {unit.value}
+                  </motion.span>
                 </motion.div>
-                <span className="mt-3 font-bold uppercase tracking-wider text-xs md:text-sm">{unit.label}</span>
+                <motion.span variants={fadeUp} className="mt-3 font-bold uppercase tracking-wider text-xs md:text-sm">{unit.label}</motion.span>
               </div>
             ))}
-          </div>
+          </motion.div>
 
-          <Link href="/booking">
-            <Button size="lg" className="bg-black text-white hover:bg-black/80 text-lg h-14 px-10">
-              Get Tickets
-            </Button>
-          </Link>
+          <motion.div variants={fadeUp}>
+            <Link href="/booking">
+              <Button size="lg" className="bg-black text-white hover:bg-black/80 text-lg h-14 px-10 hover-lift">
+                Get Tickets
+              </Button>
+            </Link>
+          </motion.div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Testimonials */}
-      <section className="py-24 bg-black">
+      <motion.section 
+        className="py-24 bg-black"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-80px" }}
+        variants={staggerContainer}
+      >
         <div className="container mx-auto px-6 md:px-12">
-          <h2 className="text-3xl md:text-5xl font-serif font-bold text-white text-center mb-16">Client Testimonials</h2>
+          <motion.h2 variants={fadeUp} className="text-3xl md:text-5xl font-serif font-bold text-white text-center mb-16">Client Testimonials</motion.h2>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <motion.div variants={staggerContainer} className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {testimonials.slice(0, 3).map((testimonial, i) => (
-              <div key={testimonial.id} className="bg-zinc-900 border border-white/5 p-8 rounded-sm hover:border-primary/30 transition-colors">
+              <motion.div key={testimonial.id} variants={scaleIn} className="bg-zinc-900 border border-white/5 p-8 rounded-sm hover:border-primary/30 transition-colors glass-card hover-lift">
                 <div className="flex gap-1 mb-6">
                   {[...Array(testimonial.rating)].map((_, i) => (
                     <Star key={i} className="w-5 h-5 fill-primary text-primary" />
@@ -276,20 +343,26 @@ export default function Home() {
                   <div className="text-white font-bold">{testimonial.name}</div>
                   <div className="text-primary text-sm uppercase tracking-wider mt-1">{testimonial.type}</div>
                 </div>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
           
-          <div className="text-center mt-12">
+          <motion.div variants={fadeUp} className="text-center mt-12">
             <Link href="/testimonials">
               <Button variant="link" className="text-primary text-lg">Read more reviews <ArrowRight className="ml-2 w-5 h-5" /></Button>
             </Link>
-          </div>
+          </motion.div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Words From The Crowd — scrolling marquee */}
-      <section className="py-20 bg-zinc-950 overflow-hidden border-y border-white/5">
+      <motion.section 
+        className="py-20 bg-zinc-950 overflow-hidden border-y border-white/5"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-80px" }}
+        variants={fadeIn}
+      >
         <div className="container mx-auto px-6 md:px-12 mb-12 text-center">
           <span className="text-primary tracking-[0.3em] uppercase text-xs font-bold">Unfiltered Reactions</span>
           <h2 className="text-3xl md:text-5xl font-serif font-bold text-white mt-3">Words From The Crowd</h2>
@@ -360,17 +433,23 @@ export default function Home() {
             ))}
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Media Partners */}
-      <section className="py-20 bg-black border-b border-white/5">
+      <motion.section 
+        className="py-20 bg-black border-b border-white/5"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-80px" }}
+        variants={staggerContainer}
+      >
         <div className="container mx-auto px-6 md:px-12">
-          <div className="text-center mb-14">
+          <motion.div variants={fadeUp} className="text-center mb-14">
             <span className="text-primary tracking-[0.3em] uppercase text-xs font-bold">Press &amp; Media</span>
             <h2 className="text-3xl md:text-4xl font-serif font-bold text-white mt-3">Media Partners</h2>
-          </div>
+          </motion.div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-4">
+          <motion.div variants={staggerContainerFast} className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-4">
             {[
               { name: "Joy FM",           img: "/media-joy-fm.png" },
               { name: "GTV",              img: "/media-gtv.png" },
@@ -382,6 +461,7 @@ export default function Home() {
             ].map((partner) => (
               <motion.div
                 key={partner.name}
+                variants={fadeUp}
                 whileHover={{ y: -4, boxShadow: "0 8px 30px rgba(212,50,12,0.25)" }}
                 className="group flex flex-col items-center justify-center gap-3 py-6 px-4 bg-white rounded-lg cursor-default transition-all duration-300"
               >
@@ -389,7 +469,7 @@ export default function Home() {
                   <img
                     src={partner.img}
                     alt={partner.name}
-                    className="max-h-20 max-w-full w-auto object-contain opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-300"
+                    className="max-h-20 max-w-full w-auto object-contain grayscale-hover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-300"
                   />
                 </div>
                 <span className="text-zinc-500 text-[10px] uppercase tracking-widest group-hover:text-zinc-700 transition-colors text-center font-semibold">
@@ -397,28 +477,34 @@ export default function Home() {
                 </span>
               </motion.div>
             ))}
-          </div>
+          </motion.div>
 
-          <p className="text-center text-white/30 text-sm mt-8 uppercase tracking-widest">
+          <motion.p variants={fadeUp} className="text-center text-white/30 text-sm mt-8 uppercase tracking-widest">
             Featured in leading Ghanaian media outlets
-          </p>
+          </motion.p>
         </div>
-      </section>
+      </motion.section>
 
 
       {/* Final CTA */}
-      <section className="py-32 bg-zinc-950 relative overflow-hidden">
+      <motion.section 
+        className="py-32 bg-zinc-950 relative overflow-hidden"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-80px" }}
+        variants={fadeUp}
+      >
         <div className="absolute inset-0 bg-gradient-to-t from-primary/10 to-transparent pointer-events-none" />
         <div className="container mx-auto px-6 md:px-12 text-center relative z-10">
           <h2 className="text-4xl md:text-7xl font-serif font-bold text-white mb-6">Ready to make your event unforgettable?</h2>
           <p className="text-xl text-white/60 mb-10 max-w-2xl mx-auto">Dates book up quickly. Secure the ultimate live band experience for your next major event.</p>
           <Link href="/booking">
-            <Button size="lg" className="h-16 px-12 text-lg">
+            <Button size="lg" className="h-16 px-12 text-lg hover-lift">
               Check Availability
             </Button>
           </Link>
         </div>
-      </section>
+      </motion.section>
     </Layout>
   );
 }

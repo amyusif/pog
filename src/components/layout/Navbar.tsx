@@ -41,7 +41,7 @@ export function Navbar() {
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -60,24 +60,41 @@ export function Navbar() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => { document.body.style.overflow = ""; };
+  }, [mobileMenuOpen]);
+
   const isAboutActive =
     location === "/about" ||
     location === "/testimonials" ||
     location === "/faq";
 
-  const navBarBg = scrolled
-    ? theme === "dark"
-      ? "bg-black/90 backdrop-blur-md border-white/10 shadow-lg py-4"
-      : "bg-white/90 backdrop-blur-md border-black/10 shadow-lg py-4"
-    : "bg-gradient-to-b from-black/80 to-transparent py-6";
+  // All nav links including about dropdown paths for active detection
+  const allNavPaths = [...mainNavLinks.map(l => l.path), ...aboutDropdownLinks.map(l => l.path)];
 
   return (
     <>
       <header
         className={cn(
-          "fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-in-out border-b border-transparent",
-          navBarBg
+          "fixed top-0 left-0 right-0 z-50 border-b border-transparent",
+          scrolled
+            ? cn(
+                "py-3 shadow-lg",
+                theme === "dark"
+                  ? "bg-black/80 backdrop-blur-xl border-white/[0.06]"
+                  : "bg-white/80 backdrop-blur-xl border-black/[0.06]"
+              )
+            : "bg-gradient-to-b from-black/80 to-transparent py-5"
         )}
+        style={{
+          transition: "padding 0.4s cubic-bezier(0.25,0.46,0.45,0.94), background-color 0.4s cubic-bezier(0.25,0.46,0.45,0.94), box-shadow 0.4s cubic-bezier(0.25,0.46,0.45,0.94), border-color 0.4s cubic-bezier(0.25,0.46,0.45,0.94)"
+        }}
       >
         <div className="container mx-auto px-6 md:px-12 flex items-center justify-between">
           <Link href="/" className="group flex items-center">
@@ -85,24 +102,38 @@ export function Navbar() {
               <img
                 src="/logo.png"
                 alt="Powers of Grace Events and Trading Limited"
-                className="h-20 md:h-28 w-auto object-contain transition-opacity group-hover:opacity-80"
+                className={cn(
+                  "w-auto object-contain group-hover:opacity-80",
+                  scrolled ? "h-16 md:h-20" : "h-20 md:h-28"
+                )}
+                style={{ transition: "height 0.4s cubic-bezier(0.25,0.46,0.45,0.94), opacity 0.3s ease" }}
               />
             </div>
           </Link>
 
           {/* Desktop Nav */}
           <nav className="hidden lg:flex items-center gap-8">
-            <ul className="flex items-center gap-6">
+            <ul className="flex items-center gap-1 relative">
               {mainNavLinks.map((link) => (
                 <li key={link.name}>
                   <Link
                     href={link.path}
                     className={cn(
-                      "text-sm font-medium uppercase tracking-wider transition-colors hover:text-primary",
-                      location === link.path ? "text-primary" : "text-white/80"
+                      "relative text-sm font-medium uppercase tracking-wider px-4 py-2 rounded-full",
+                      location === link.path
+                        ? "text-primary"
+                        : "text-white/80 hover:text-white"
                     )}
+                    style={{ transition: "color 0.25s ease" }}
                   >
                     {link.name}
+                    {location === link.path && (
+                      <motion.div
+                        layoutId="nav-active-pill"
+                        className="absolute inset-0 bg-white/[0.08] rounded-full -z-10"
+                        transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                      />
+                    )}
                   </Link>
                 </li>
               ))}
@@ -123,17 +154,28 @@ export function Navbar() {
                   aria-haspopup="menu"
                   aria-expanded={aboutOpen}
                   className={cn(
-                    "flex items-center gap-1 text-sm font-medium uppercase tracking-wider transition-colors hover:text-primary",
-                    isAboutActive ? "text-primary" : "text-white/80"
+                    "relative flex items-center gap-1 text-sm font-medium uppercase tracking-wider px-4 py-2 rounded-full",
+                    isAboutActive
+                      ? "text-primary"
+                      : "text-white/80 hover:text-white"
                   )}
+                  style={{ transition: "color 0.25s ease" }}
                 >
                   About
                   <ChevronDown
                     className={cn(
-                      "w-4 h-4 transition-transform duration-200",
+                      "w-4 h-4",
                       aboutOpen ? "rotate-180" : ""
                     )}
+                    style={{ transition: "transform 0.25s cubic-bezier(0.25,0.46,0.45,0.94)" }}
                   />
+                  {isAboutActive && !mainNavLinks.find(l => l.path === location) && (
+                    <motion.div
+                      layoutId="nav-active-pill"
+                      className="absolute inset-0 bg-white/[0.08] rounded-full -z-10"
+                      transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                    />
+                  )}
                 </button>
 
                 <AnimatePresence>
@@ -141,15 +183,20 @@ export function Navbar() {
                     <motion.div
                       role="menu"
                       aria-label="About submenu"
-                      initial={{ opacity: 0, y: 8 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: 8 }}
-                      transition={{ duration: 0.18 }}
+                      initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                      transition={{ duration: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
                       onKeyDown={(e) => { if (e.key === "Escape") setAboutOpen(false); }}
-                      className="absolute top-full left-1/2 -translate-x-1/2 mt-3 w-52 bg-black border border-white/10 shadow-2xl z-50 overflow-hidden"
+                      className={cn(
+                        "absolute top-full left-1/2 -translate-x-1/2 mt-3 w-52 shadow-2xl z-50 overflow-hidden rounded-lg",
+                        theme === "dark"
+                          ? "bg-zinc-900/95 backdrop-blur-xl border border-white/10"
+                          : "bg-white/95 backdrop-blur-xl border border-black/10"
+                      )}
                     >
                       {/* Gold accent top line */}
-                      <div className="h-[2px] bg-primary w-full" />
+                      <div className="h-[2px] bg-gradient-to-r from-primary/0 via-primary to-primary/0 w-full" />
                       {aboutDropdownLinks.map((item) => (
                         <Link
                           key={item.path}
@@ -158,11 +205,12 @@ export function Navbar() {
                           onClick={() => setAboutOpen(false)}
                           onKeyDown={(e) => { if (e.key === "Escape") setAboutOpen(false); }}
                           className={cn(
-                            "block px-5 py-3 text-sm uppercase tracking-wider transition-colors hover:bg-white/5 hover:text-primary focus:outline-none focus:bg-white/5 focus:text-primary",
+                            "block px-5 py-3 text-sm uppercase tracking-wider hover:bg-white/5 hover:text-primary focus:outline-none focus:bg-white/5 focus:text-primary",
                             location === item.path
                               ? "text-primary bg-white/5"
                               : "text-white/80"
                           )}
+                          style={{ transition: "background-color 0.2s ease, color 0.2s ease" }}
                         >
                           {item.name}
                         </Link>
@@ -174,20 +222,45 @@ export function Navbar() {
             </ul>
 
             {/* Theme Toggle */}
-            <button
+            <motion.button
               onClick={toggleTheme}
               aria-label="Toggle light/dark mode"
-              className="w-9 h-9 flex items-center justify-center rounded-full border border-white/20 text-white/70 hover:text-primary hover:border-primary transition-all"
-            >
-              {theme === "dark" ? (
-                <Sun className="w-4 h-4" />
-              ) : (
-                <Moon className="w-4 h-4" />
+              className={cn(
+                "w-9 h-9 flex items-center justify-center rounded-full border hover:border-primary",
+                theme === "dark"
+                  ? "border-white/20 text-white/70 hover:text-primary"
+                  : "border-black/20 text-black/70 hover:text-primary"
               )}
-            </button>
+              whileTap={{ scale: 0.9, rotate: 180 }}
+              transition={{ duration: 0.3 }}
+            >
+              <AnimatePresence mode="wait" initial={false}>
+                {theme === "dark" ? (
+                  <motion.div
+                    key="sun"
+                    initial={{ opacity: 0, rotate: -90, scale: 0 }}
+                    animate={{ opacity: 1, rotate: 0, scale: 1 }}
+                    exit={{ opacity: 0, rotate: 90, scale: 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <Sun className="w-4 h-4" />
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="moon"
+                    initial={{ opacity: 0, rotate: 90, scale: 0 }}
+                    animate={{ opacity: 1, rotate: 0, scale: 1 }}
+                    exit={{ opacity: 0, rotate: -90, scale: 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <Moon className="w-4 h-4" />
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.button>
 
             <Link href="/booking">
-              <Button className="rounded-none uppercase tracking-widest text-xs font-bold border border-primary/50 hover:bg-primary hover:text-black">
+              <Button className="rounded-none uppercase tracking-widest text-xs font-bold border border-primary/50 hover:bg-primary hover:text-black hover:shadow-lg hover:shadow-primary/20 active:scale-95 transition-all duration-300">
                 Book Us
               </Button>
             </Link>
@@ -195,17 +268,24 @@ export function Navbar() {
 
           {/* Mobile right side */}
           <div className="lg:hidden flex items-center gap-3">
-            <button
+            <motion.button
               onClick={toggleTheme}
               aria-label="Toggle light/dark mode"
-              className="w-9 h-9 flex items-center justify-center rounded-full border border-white/20 text-white/70 hover:text-primary hover:border-primary transition-all"
+              className={cn(
+                "w-9 h-9 flex items-center justify-center rounded-full border",
+                theme === "dark"
+                  ? "border-white/20 text-white/70"
+                  : "border-black/20 text-black/70"
+              )}
+              whileTap={{ scale: 0.9, rotate: 180 }}
+              transition={{ duration: 0.3 }}
             >
               {theme === "dark" ? (
                 <Sun className="w-4 h-4" />
               ) : (
                 <Moon className="w-4 h-4" />
               )}
-            </button>
+            </motion.button>
             <button
               className="text-white p-2"
               onClick={() => setMobileMenuOpen(true)}
@@ -220,49 +300,74 @@ export function Navbar() {
       {/* Mobile Menu */}
       <AnimatePresence>
         {mobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, x: "100%" }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: "100%" }}
-            transition={{ type: "tween", duration: 0.4 }}
-            className="fixed inset-0 z-[60] bg-black flex flex-col"
-          >
-            <div className="flex items-center justify-between p-6 border-b border-white/10">
-              <img
-                src="/logo.png"
-                alt="Powers of Grace Events and Trading Limited"
-                className="h-20 w-auto object-contain brightness-0 invert"
-              />
-              <button
-                onClick={() => setMobileMenuOpen(false)}
-                className="text-white p-2"
-                aria-label="Close navigation menu"
-              >
-                <X className="w-8 h-8" />
-              </button>
-            </div>
-            <nav className="flex-1 flex flex-col items-center justify-center gap-7 p-6 overflow-y-auto">
-              {mobileNavLinks.map((link) => (
-                <Link
-                  key={link.name}
-                  href={link.path}
-                  className={cn(
-                    "text-2xl font-serif tracking-wide transition-colors",
-                    location === link.path ? "text-primary" : "text-white"
-                  )}
+          <>
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="fixed inset-0 z-[59] bg-black/60 backdrop-blur-sm"
+              onClick={() => setMobileMenuOpen(false)}
+            />
+            {/* Panel */}
+            <motion.div
+              initial={{ opacity: 0, x: "100%" }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: "100%" }}
+              transition={{ type: "spring", damping: 30, stiffness: 300 }}
+              className="fixed inset-y-0 right-0 w-full max-w-sm z-[60] bg-black flex flex-col"
+            >
+              <div className="flex items-center justify-between p-6 border-b border-white/10">
+                <img
+                  src="/logo.png"
+                  alt="Powers of Grace Events and Trading Limited"
+                  className="h-16 w-auto object-contain brightness-0 invert"
+                />
+                <button
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="text-white p-2 hover:text-primary transition-colors"
+                  aria-label="Close navigation menu"
                 >
-                  {link.name}
-                </Link>
-              ))}
-              <div className="mt-6 flex flex-col gap-4 w-full max-w-sm">
-                <Link href="/booking">
-                  <Button size="lg" className="w-full text-lg">
-                    Book The Band
-                  </Button>
-                </Link>
+                  <X className="w-7 h-7" />
+                </button>
               </div>
-            </nav>
-          </motion.div>
+              <nav className="flex-1 flex flex-col items-start justify-center gap-1 p-8 overflow-y-auto">
+                {mobileNavLinks.map((link, i) => (
+                  <motion.div
+                    key={link.name}
+                    initial={{ opacity: 0, x: 30 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.05 + i * 0.04, duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
+                    className="w-full"
+                  >
+                    <Link
+                      href={link.path}
+                      className={cn(
+                        "block text-2xl font-serif tracking-wide py-3 border-b border-white/5",
+                        location === link.path ? "text-primary" : "text-white hover:text-primary"
+                      )}
+                      style={{ transition: "color 0.2s ease" }}
+                    >
+                      {link.name}
+                    </Link>
+                  </motion.div>
+                ))}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.4, duration: 0.35 }}
+                  className="mt-8 w-full"
+                >
+                  <Link href="/booking">
+                    <Button size="lg" className="w-full text-lg">
+                      Book The Band
+                    </Button>
+                  </Link>
+                </motion.div>
+              </nav>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
     </>
