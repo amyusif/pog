@@ -2,8 +2,12 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
-import { CheckCircle2, ArrowRight, ArrowLeft } from "lucide-react";
+import { CheckCircle2, ArrowRight, ArrowLeft, Calendar as CalendarIcon } from "lucide-react";
 import { fadeUp, staggerContainer, smoothEase } from '@/hooks/useScrollReveal';
+import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
+import { format } from "date-fns";
+import { cn } from "@/lib/utils";
 
 // ── Pricing configs ─────────────────────────────────────────────────────────
 const LIVE_EVENT_OPTIONS = [
@@ -659,34 +663,48 @@ export default function Booking() {
                         When is the event?
                       </h2>
                       <p className="text-muted-foreground mb-10">
-                        Choose the date and estimated start time.
+                        Choose the date for your event.
                       </p>
-                      <div className="space-y-6">
-                        <div>
-                          <label className="block text-sm font-medium text-foreground mb-3">
-                            Date
-                          </label>
-                          <input
-                            type="date"
-                            value={formData.date}
-                            onChange={(e) => update("date", e.target.value)}
-                            className="w-full bg-background border border-border p-4 text-foreground rounded-lg focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
-                          />
-                        </div>
-                        <div>
-                          <label className="block text-sm font-medium text-foreground mb-3">
-                            Estimated Start Time{" "}
-                            <span className="text-muted-foreground/70 font-normal">
-                              (optional)
-                            </span>
-                          </label>
-                          <input
-                            type="time"
-                            value={formData.time}
-                            onChange={(e) => update("time", e.target.value)}
-                            className="w-full bg-background border border-border p-4 text-foreground rounded-lg focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
-                          />
-                        </div>
+                      <div>
+                        <label className="block text-sm font-medium text-foreground mb-3">
+                          Event Date
+                        </label>
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <Button
+                              variant="outline"
+                              className={cn(
+                                "w-full justify-start text-left font-normal p-6 bg-background border-border text-base md:text-lg hover:border-primary/50 hover:bg-card transition-all",
+                                !formData.date && "text-muted-foreground"
+                              )}
+                            >
+                              <CalendarIcon className="mr-3 h-5 w-5 text-primary shrink-0" />
+                              {formData.date ? (
+                                format(new Date(formData.date + "T00:00:00"), "PPP")
+                              ) : (
+                                <span>Pick a date</span>
+                              )}
+                            </Button>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-auto p-0 z-50 bg-card border-border shadow-2xl" align="start">
+                            <Calendar
+                              mode="single"
+                              selected={formData.date ? new Date(formData.date + "T00:00:00") : undefined}
+                              onSelect={(d) => {
+                                if (d) {
+                                  const year = d.getFullYear();
+                                  const month = String(d.getMonth() + 1).padStart(2, "0");
+                                  const day = String(d.getDate()).padStart(2, "0");
+                                  update("date", `${year}-${month}-${day}`);
+                                } else {
+                                  update("date", "");
+                                }
+                              }}
+                              disabled={(date) => date < new Date(new Date().setHours(0, 0, 0, 0))}
+                              initialFocus
+                            />
+                          </PopoverContent>
+                        </Popover>
                       </div>
                     </motion.div>
                   )}
@@ -922,14 +940,13 @@ export default function Booking() {
                     </div>
                   )}
 
-                  {(formData.date || formData.time) && (
+                  {formData.date && (
                     <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
                       <div className="text-muted-foreground uppercase tracking-widest text-xs mb-2 font-medium">
                         When
                       </div>
                       <div className="text-foreground font-semibold text-base">
-                        {formData.date}
-                        {formData.time && <span className="text-muted-foreground font-normal ml-1">at {formData.time}</span>}
+                        {format(new Date(formData.date + "T00:00:00"), "PPP")}
                       </div>
                     </div>
                   )}

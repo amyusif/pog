@@ -82,15 +82,17 @@ export function Navbar() {
     <>
       <header
         className={cn(
-          "fixed top-0 left-0 right-0 z-50 border-b border-transparent",
+          "fixed top-0 left-0 right-0 z-50",
           scrolled
             ? cn(
                 "py-3 shadow-lg",
                 theme === "dark"
-                  ? "bg-black/80 backdrop-blur-xl border-white/[0.06]"
-                  : "bg-white/80 backdrop-blur-xl border-black/[0.06]"
+                  ? "bg-black/80 backdrop-blur-xl"
+                  : "bg-white/90 backdrop-blur-xl shadow-sm"
               )
-            : "bg-gradient-to-b from-black/80 to-transparent py-5"
+            : theme === "dark"
+              ? "bg-gradient-to-b from-black/80 to-transparent py-5"
+              : "bg-gradient-to-b from-white/95 via-white/80 to-transparent py-5"
         )}
         style={{
           transition: "padding 0.4s cubic-bezier(0.25,0.46,0.45,0.94), background-color 0.4s cubic-bezier(0.25,0.46,0.45,0.94), box-shadow 0.4s cubic-bezier(0.25,0.46,0.45,0.94), border-color 0.4s cubic-bezier(0.25,0.46,0.45,0.94)"
@@ -121,8 +123,10 @@ export function Navbar() {
                     className={cn(
                       "relative text-sm font-medium uppercase tracking-wider px-4 py-2 rounded-full",
                       location === link.path
-                        ? "text-primary"
-                        : "text-white/80 hover:text-white"
+                        ? "text-primary font-bold"
+                        : theme === "dark"
+                          ? "text-white/80 hover:text-white"
+                          : "text-foreground/80 hover:text-foreground font-semibold"
                     )}
                     style={{ transition: "color 0.25s ease" }}
                   >
@@ -130,7 +134,10 @@ export function Navbar() {
                     {location === link.path && (
                       <motion.div
                         layoutId="nav-active-pill"
-                        className="absolute inset-0 bg-white/[0.08] rounded-full -z-10"
+                        className={cn(
+                          "absolute inset-0 rounded-full -z-10",
+                          theme === "dark" ? "bg-white/[0.08]" : "bg-black/[0.06]"
+                        )}
                         transition={{ type: "spring", stiffness: 400, damping: 30 }}
                       />
                     )}

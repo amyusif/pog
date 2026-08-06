@@ -4,6 +4,7 @@ import { Footer } from "./Footer";
 import { MessageCircle } from "lucide-react";
 import { Link } from "wouter";
 import { motion, AnimatePresence } from "framer-motion";
+import { PageLoader } from "../PageLoader";
 
 export function Layout({ children }: { children: ReactNode }) {
   const [showFloating, setShowFloating] = useState(false);
@@ -18,6 +19,7 @@ export function Layout({ children }: { children: ReactNode }) {
 
   return (
     <div className="min-h-screen bg-background text-foreground selection:bg-primary selection:text-black flex flex-col">
+      <PageLoader />
       <Navbar />
       <main className="flex-1">
         {children}

@@ -86,13 +86,13 @@ export default function Home() {
       {/* Hero Section */}
       <section className="relative h-[100dvh] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 z-0">
-          {/* Dark overlay for text legibility */}
-          <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/60 to-black z-10" />
+          {/* Background overlay for text legibility */}
+          <div className="absolute inset-0 bg-gradient-to-b from-background/75 via-background/35 to-background dark:from-black/50 dark:via-black/40 dark:to-black z-10" />
           {/* Hero background image with Parallax */}
           <motion.img
             src="/hero-bg.jpg"
             alt="Powers of Grace Live Stage"
-            className="absolute inset-0 w-full h-full object-cover object-center opacity-70"
+            className="absolute inset-0 w-full h-full object-cover object-center opacity-65 dark:opacity-80"
             style={{ y: heroY }}
           />
           {/* Subtle noise/grain texture overlay */}
@@ -110,13 +110,13 @@ export default function Home() {
             </span>
           </motion.div>
           
-          <h1 className="text-5xl md:text-7xl lg:text-9xl font-serif font-bold text-white mb-8 tracking-tighter leading-none min-h-[1em]">
+          <h1 className="text-5xl md:text-7xl lg:text-9xl font-serif font-bold text-foreground dark:text-white mb-8 tracking-tighter leading-none min-h-[1em]">
             <motion.span>{typedText}</motion.span>
             <span className="animate-pulse">|</span>
           </h1>
           
           <motion.p 
-            className="text-xl md:text-2xl text-white/80 max-w-2xl mx-auto mb-12 font-light"
+            className="text-xl md:text-2xl text-foreground/80 dark:text-white/80 max-w-2xl mx-auto mb-12 font-light"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1, delay: 0.8, ease: smoothEase }}
@@ -131,12 +131,12 @@ export default function Home() {
             transition={{ duration: 0.8, delay: 1, ease: smoothEase }}
           >
             <Link href="/booking">
-              <Button size="lg" className="text-lg px-8 h-16 w-full sm:w-auto hover:bg-white hover:text-black">
+              <Button size="lg" className="text-lg px-8 h-16 w-full sm:w-auto hover:bg-primary/90">
                 Book Us Now
               </Button>
             </Link>
             <Link href="/gallery">
-              <Button size="lg" variant="outline" className="text-lg px-8 h-16 w-full sm:w-auto border-white text-white hover:bg-white hover:text-black">
+              <Button size="lg" variant="outline" className="text-lg px-8 h-16 w-full sm:w-auto border-foreground/30 text-foreground hover:bg-foreground hover:text-background dark:border-white dark:text-white dark:hover:bg-white dark:hover:text-black">
                 <Video className="w-5 h-5 mr-2" />
                 Watch Highlights
               </Button>
