@@ -2,7 +2,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
-import { Play, Download, Search } from "lucide-react";
+import { Play, Download, Search, X } from "lucide-react";
 import { galleryItems } from "@/data/content";
 import { cn } from "@/lib/utils";
 import { fadeUp, fadeIn, scaleIn, staggerContainer } from '@/hooks/useScrollReveal';
@@ -10,6 +10,7 @@ import { fadeUp, fadeIn, scaleIn, staggerContainer } from '@/hooks/useScrollReve
 export default function Gallery() {
   const [filter, setFilter] = useState("All");
   const [mood, setMood] = useState("All");
+  const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
 
   const types = ["All", "Photo", "Video"];
   const moods = ["All", "Romantic", "High-Energy", "Corporate-Formal"];
@@ -103,6 +104,7 @@ export default function Gallery() {
                   layout
                   variants={scaleIn}
                   exit={{ opacity: 0, scale: 0.9 }}
+                  onClick={() => item.type === "Video" && (item as any).videoSrc && setSelectedVideo((item as any).videoSrc)}
                   className="relative group overflow-hidden rounded-xl cursor-pointer hover-lift shadow-sm bg-card aspect-[4/3]"
                 >
                   <div className={`absolute inset-0 ${item.image} bg-cover bg-center transition-transform duration-700 group-hover:scale-110`} />
@@ -157,6 +159,41 @@ export default function Gallery() {
           </Button>
         </div>
       </motion.section>
+
+      {/* Video Modal */}
+      <AnimatePresence>
+        {selectedVideo && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4 md:p-12 backdrop-blur-sm"
+            onClick={() => setSelectedVideo(null)}
+          >
+            <button 
+              className="absolute top-6 right-6 text-white/70 hover:text-white bg-black/50 hover:bg-black rounded-full p-2 transition-all"
+              onClick={() => setSelectedVideo(null)}
+            >
+              <X className="w-8 h-8" />
+            </button>
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="relative w-full max-w-5xl aspect-video bg-black rounded-xl overflow-hidden shadow-2xl border border-white/10"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <video
+                src={selectedVideo}
+                autoPlay
+                controls
+                className="w-full h-full object-contain"
+              />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </Layout>
   );
 }

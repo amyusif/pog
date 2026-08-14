@@ -292,7 +292,7 @@ export const faqs = [
 
 export const galleryItems = [
   { id: 1, type: "Photo", mood: "High-Energy", title: "Festival Main Stage", image: "bg-[url('https://images.unsplash.com/photo-1459749411175-04bf5292ceea?auto=format&fit=crop&q=80&w=1000')] bg-cover bg-center" },
-  { id: 2, type: "Video", mood: "Romantic", title: "First Dance", image: "bg-[url('https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&q=80&w=1000')] bg-cover bg-center" },
+  { id: 2, type: "Video", mood: "High-Energy", title: "Live Event Highlight", image: "bg-[url('https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&q=80&w=1000')] bg-cover bg-center", videoSrc: "/media/vid.mov" },
   { id: 3, type: "Photo", mood: "Corporate-Formal", title: "Gala Dinner Setup", image: "bg-[url('https://images.unsplash.com/photo-1511795409834-432f7b1728d2?auto=format&fit=crop&q=80&w=1000')] bg-cover bg-center" },
   { id: 4, type: "Photo", mood: "High-Energy", title: "Crowd Interaction", image: "bg-[url('https://images.unsplash.com/photo-1540039155732-68473678c2ec?auto=format&fit=crop&q=80&w=1000')] bg-cover bg-center" },
   { id: 5, type: "Video", mood: "Corporate-Formal", title: "Awards Ceremony Stings", image: "bg-[url('https://images.unsplash.com/photo-1505236858219-8359eb29e329?auto=format&fit=crop&q=80&w=1000')] bg-cover bg-center" },
