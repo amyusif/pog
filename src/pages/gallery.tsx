@@ -107,7 +107,17 @@ export default function Gallery() {
                   onClick={() => item.type === "Video" && (item as any).videoSrc && setSelectedVideo((item as any).videoSrc)}
                   className="relative group overflow-hidden rounded-xl cursor-pointer hover-lift shadow-sm bg-card aspect-[4/3]"
                 >
-                  <div className={`absolute inset-0 ${item.image} bg-cover bg-center transition-transform duration-700 group-hover:scale-110`} />
+                  {item.type === "Video" && (item as any).videoSrc ? (
+                    <video 
+                      src={`${(item as any).videoSrc}#t=0.1`}
+                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                      preload="metadata"
+                      muted
+                      playsInline
+                    />
+                  ) : (
+                    <div className={`absolute inset-0 ${item.image} bg-cover bg-center transition-transform duration-700 group-hover:scale-110`} />
+                  )}
                   <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-100 transition-opacity duration-300" />
                   
@@ -188,6 +198,8 @@ export default function Gallery() {
                 src={selectedVideo}
                 autoPlay
                 controls
+                muted
+                playsInline
                 className="w-full h-full object-contain"
               />
             </motion.div>
