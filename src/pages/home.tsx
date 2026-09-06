@@ -1,9 +1,9 @@
 import { motion, useMotionValue, useTransform, animate, useScroll, useInView } from "framer-motion";
 import { Link } from "wouter";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Music, Star, Calendar, MapPin, Users, Video } from "lucide-react";
+import { ArrowRight, Music, Star, Calendar, MapPin, Users, Video, Play, X } from "lucide-react";
 import { services, testimonials, upcomingEvents } from "@/data/content";
 import { useScrollReveal, fadeUp, fadeIn, fadeLeft, fadeRight, scaleIn, staggerContainer, staggerContainerFast, smoothEase } from '@/hooks/useScrollReveal';
 import { hasLoadedInitialPage } from "@/components/PageLoader";
@@ -78,6 +78,15 @@ const SHOW_DATE = new Date("2026-12-20T19:00:00+00:00");
 export default function Home() {
   const countdown = useCountdown(SHOW_DATE);
   const typedText = useTypewriter("POWERS OF GRACE");
+  const [videoOpen, setVideoOpen] = useState(false);
+
+  const closeVideo = useCallback(() => setVideoOpen(false), []);
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') closeVideo(); };
+    if (videoOpen) document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [videoOpen, closeVideo]);
 
   const { scrollY } = useScroll();
   const heroY = useTransform(scrollY, [0, 1000], ["0%", "50%"]);
@@ -259,29 +268,91 @@ export default function Home() {
       >
         <div className="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-primary/5 to-transparent pointer-events-none" />
         <div className="container mx-auto px-6 md:px-12 text-center">
-          <motion.h2 variants={fadeUp} className="text-3xl md:text-5xl font-serif font-bold text-white mb-12">Experience The Energy</motion.h2>
-          
-          <motion.div variants={fadeUp} className="aspect-video max-w-5xl mx-auto rounded-sm overflow-hidden relative group cursor-pointer bg-zinc-900 border border-white/10 shadow-2xl hover-lift">
-            <video 
-              autoPlay 
-              muted 
-              loop 
-              playsInline 
-              className="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:opacity-70 transition-opacity duration-500"
+          <motion.p variants={fadeUp} className="text-primary uppercase tracking-widest text-sm font-semibold mb-3">See Us In Action</motion.p>
+          <motion.h2 variants={fadeUp} className="text-3xl md:text-5xl font-serif font-bold text-white mb-4">Experience The Energy</motion.h2>
+          <motion.p variants={fadeUp} className="text-white/60 max-w-xl mx-auto mb-12">Watch us perform live — click to play with sound.</motion.p>
+
+          {/* Thumbnail / Preview — click to open modal */}
+          <motion.div
+            variants={fadeUp}
+            onClick={() => setVideoOpen(true)}
+            className="aspect-video max-w-5xl mx-auto rounded-2xl overflow-hidden relative group cursor-pointer bg-zinc-900 border border-white/10 shadow-2xl"
+            style={{ boxShadow: '0 0 60px rgba(217,119,6,0.15)' }}
+          >
+            {/* Muted looping preview */}
+            <video
+              autoPlay
+              muted
+              loop
+              playsInline
+              className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity duration-500 scale-105 group-hover:scale-100 transition-transform"
             >
-              <source src="https://player.vimeo.com/external/517090081.sd.mp4?s=d4f1cdfa643a60a72ef42849202c6b45070ff389&profile_id=165&oauth2_token_id=57447761" type="video/mp4" />
+              <source src="/media/vid.mov" type="video/mp4" />
             </video>
+
+            {/* Dark gradient overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+
+            {/* Animated play button */}
             <div className="absolute inset-0 flex items-center justify-center z-10">
-              <div className="w-20 h-20 bg-primary rounded-full flex items-center justify-center pl-1 group-hover:scale-110 transition-transform shadow-xl">
-                <Video className="w-8 h-8 text-black" />
+              <div className="relative">
+                {/* Pulse rings */}
+                <div className="absolute inset-0 rounded-full bg-primary/30 animate-ping scale-150" />
+                <div className="absolute inset-0 rounded-full bg-primary/20 animate-ping scale-125" style={{ animationDelay: '0.3s' }} />
+                <div className="w-24 h-24 bg-primary rounded-full flex items-center justify-center pl-2 group-hover:scale-110 transition-transform duration-300 shadow-2xl relative z-10">
+                  <Play className="w-10 h-10 text-black fill-black" />
+                </div>
               </div>
             </div>
+
+            {/* Bottom label */}
             <div className="absolute bottom-6 left-6 text-left z-10">
-              <div className="text-white font-bold text-xl drop-shadow-md">Powers of Grace - Live at Accra International Conference Centre</div>
-              <div className="text-white/80 text-sm drop-shadow-md">Highlight Reel 2025</div>
+              <div className="text-white font-bold text-xl drop-shadow-lg">Powers of Grace — Live Performance</div>
+              <div className="text-white/70 text-sm drop-shadow-md mt-1">Highlight Reel 2025</div>
+            </div>
+
+            {/* Top-right badge */}
+            <div className="absolute top-4 right-4 z-10 bg-black/50 backdrop-blur-sm border border-white/20 rounded-full px-3 py-1 flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+              <span className="text-white text-xs font-semibold">LIVE RECORDING</span>
             </div>
           </motion.div>
         </div>
+
+        {/* Fullscreen Modal Player */}
+        {videoOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 backdrop-blur-sm"
+            onClick={closeVideo}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+              className="relative w-full max-w-6xl mx-4 aspect-video rounded-xl overflow-hidden shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <video
+                src="/media/vid.mov"
+                autoPlay
+                controls
+                playsInline
+                className="w-full h-full object-contain bg-black"
+              />
+            </motion.div>
+            {/* Close button */}
+            <button
+              onClick={closeVideo}
+              className="absolute top-4 right-4 w-12 h-12 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center transition-colors border border-white/20"
+              aria-label="Close video"
+            >
+              <X className="w-6 h-6 text-white" />
+            </button>
+          </motion.div>
+        )}
       </motion.section>
 
       {/* Upcoming Show Countdown */}
